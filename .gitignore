@@ -6,6 +6,9 @@ __pycache__/
 # MacOS files
 .DS_Store
 
+# Exclude local mlruns artifacts
+mlruns/
+
 # C extensions
 *.so
 
