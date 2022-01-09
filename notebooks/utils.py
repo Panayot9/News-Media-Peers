@@ -1,22 +1,196 @@
+import csv
 import json
+import logging
 import os
+import zipfile
+from collections import defaultdict
 
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+import pandas as pd
+import requests
 from gensim.models import Word2Vec
 from stellargraph import StellarGraph
 
 np.random.seed(16)
-
+logger = logging.getLogger(__name__)
 _PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _ALEXA_DATA_PATH = os.path.abspath(os.path.join(_PROJECT_PATH, 'alexa_data'))
 _MODEL_STORAGE = os.path.join(_PROJECT_PATH, 'models')
 _FEATURES_DIR = _PROJECT_PATH + '/data/{corpus_dir}/features'
 _CORPUS_PATH = _PROJECT_PATH + 'data/{corpus_dir}/corpus.tsv'
+_PROCESSED_ALEXA_RESPONSES_URL = 'https://drive.google.com/file/d/1die27CFyizjz1-kQ3ZfTl-ZjL74QCsPr/view?usp=sharing'
+_PROCESSED_ALEXA_RESPONSES_FILE = os.path.join(_ALEXA_DATA_PATH, 'processed_alexa_responses.zip')
+_NODE_FEATURES_FILE = os.path.join(_ALEXA_DATA_PATH, 'node_features.csv')
+
+
+def check_for_processed_alexa_responses_archive():
+    return os.path.exists(_PROCESSED_ALEXA_RESPONSES_FILE)
+
+
+def download_processed_alexa_responses_archive():
+    """Download processed alexa responses archive.
+    In the archive you'll find all 104'905 processed files and saved in JSON format.
+    Each file contains a JSON object with the following keys:
+    [
+        'site',
+        'comparison_metrics',
+        'similar_sites_by_audience_overlap',
+        'top_industry_topics_by_social_engagement',
+        'top_keywords_by_traffic',
+        'alexa_rank_90_days_trends',
+        'keyword_gaps',
+        'easy_to_rank_keywords',
+        'buyer_keywords',
+        'optimization_opportunities',
+        'top_social_topics',
+        'social_engagement',
+        'popular_articles',
+        'traffic_sources',
+        'referral_sites',
+        'top_keywords',
+        'audience_overlap',
+        'alexa_rank',
+        'audience_geography_in_past_30_days',
+        'site_metrics'
+    ]
+    """
+    logger.info(f'Downloading "processed_alexa_responses.zip" to {_ALEXA_DATA_PATH}')
+
+    with requests.get(_PROCESSED_ALEXA_RESPONSES_URL, stream=True) as r:
+        r.raise_for_status()
+        with open(_PROCESSED_ALEXA_RESPONSES_FILE, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                # If you have chunk encoded response uncomment if
+                # and set chunk_size parameter to None.
+                #if chunk:
+                f.write(chunk)
+    return _PROCESSED_ALEXA_RESPONSES_FILE
+
+
+def generate_note_features(target_sites, target_features):
+    if not check_for_processed_alexa_responses_archive():
+        raise Exception(f'Please download archive file using {_PROCESSED_ALEXA_RESPONSES_URL} to directory {_ALEXA_DATA_PATH}')
+
+    node_feature = defaultdict(dict)
+    with zipfile.ZipFile(_PROCESSED_ALEXA_RESPONSES_FILE, 'r') as zip_fd:
+        for site in target_sites:
+            with zip_fd.open(f'processed_alexa_responses/{site}.json') as f:
+                data = json.load(f)
+                for section, features in target_features.items():
+                    if data.get(section, {}):
+                        node_feature[site][section] = {feature: data[section].get(feature) for feature in features}
+                    else:
+                        node_feature[site][section] = None
+
+    return node_feature
+
+
+def generate_node_features_file():
+    """Target features:
+    alexa_rank -> site_rank
+    site_metrics -> daily_pageviews_per_visitors
+    site_metrics -> daily_time_on_sites
+    site_metrics -> total_sites_linking_ins
+    site_metrics -> bounce_rate
+
+    Raw features:
+    >>> node_features['cnn.com']
+    {
+        'alexa_rank': {
+            'site_rank': '# 79'
+        },
+        'site_metrics': {
+            'daily_pageviews_per_visitor': '2.26',
+            'daily_time_on_site': '4:08',
+            'total_sites_linking_in': '153,450',
+            'bounce_rate': '52.9%'
+        }
+    }
+
+    Processed features:
+    {
+        'alexa_rank': {'site_rank': 79},
+        'site_metrics': {
+            'daily_pageviews_per_visitor': 2.26,
+            'daily_time_on_site': 248,  # daily_time_on_site in seconds
+            'total_sites_linking_in': 153450,
+            'bounce_rate': 0.529        # bounce_rate in decimal
+        }
+    }
+    """
+    target_features = {
+        'alexa_rank': ['site_rank',],
+        'site_metrics': ['daily_pageviews_per_visitor', 'daily_time_on_site', 'total_sites_linking_in', 'bounce_rate']
+    }
+
+    if not check_for_processed_alexa_responses_archive():
+        raise Exception(f'Please download archive file using {_PROCESSED_ALEXA_RESPONSES_URL} to directory {_ALEXA_DATA_PATH}')
+
+    with zipfile.ZipFile(_PROCESSED_ALEXA_RESPONSES_FILE, 'r') as zip_fd:
+        all_sites = [os.path.basename(site).replace('.json', '')
+                     for site in zip_fd.namelist()
+                     if site != 'processed_alexa_responses/' and site.endswith('.json') and not site.startswith('__MACOSX/')]
+
+    site_features = generate_note_features(all_sites, target_features)
+
+    for features in site_features.values():
+        if features.get('alexa_rank') and features['alexa_rank'].get('site_rank'):
+            features['alexa_rank']['site_rank'] = int(features['alexa_rank']['site_rank'].strip('# ').replace(',', ''))
+
+        if features.get('site_metrics'):
+            if features['site_metrics'].get('daily_pageviews_per_visitor'):
+                features['site_metrics']['daily_pageviews_per_visitor'] = float(features['site_metrics']['daily_pageviews_per_visitor'])
+
+            if features['site_metrics'].get('daily_time_on_site'):
+                minutes, seconds = features['site_metrics']['daily_time_on_site'].split(':')
+                features['site_metrics']['daily_time_on_site'] = int(minutes) * 60 + int(seconds)
+
+            if features['site_metrics'].get('total_sites_linking_in'):
+                features['site_metrics']['total_sites_linking_in'] = int(features['site_metrics']['total_sites_linking_in'].replace(',', ''))
+
+            if features['site_metrics'].get('bounce_rate'):
+                features['site_metrics']['bounce_rate'] = float(features['site_metrics']['bounce_rate'].replace('%', '')) / 100
+
+    processed_site_feaures = []
+    for site, features in site_features.items():
+        alexa_rank = None if features.get('alexa_rank') is None else features['alexa_rank'].get('site_rank')
+
+        if features.get('site_metrics') is None:
+            daily_pageviews_per_visitor, daily_time_on_site, total_sites_linking_in, bounce_rate = None, None, None, None
+        else:
+            daily_pageviews_per_visitor = features['site_metrics'].get('daily_pageviews_per_visitor')
+            daily_time_on_site = features['site_metrics'].get('daily_time_on_site')
+            total_sites_linking_in = features['site_metrics'].get('total_sites_linking_in')
+            bounce_rate = features['site_metrics'].get('bounce_rate')
+
+        processed_site_feaures.append({
+            'site': site,
+            'alexa_rank': alexa_rank,
+            'daily_pageviews_per_visitor': daily_pageviews_per_visitor,
+            'daily_time_on_site': daily_time_on_site,
+            'total_sites_linking_in': total_sites_linking_in,
+            'bounce_rate': bounce_rate,
+        })
+
+    with open(_NODE_FEATURES_FILE, 'w') as f:
+        writer = csv.DictWriter(f, processed_site_feaures[0].keys())
+        writer.writeheader()
+        writer.writerows(processed_site_feaures)
+
+    logger.info('Successfully generated node features file:', _NODE_FEATURES_FILE)
+
+
+def load_node_features():
+    if not os.path.exists(_NODE_FEATURES_FILE):
+        generate_node_features_file()
+
+    return pd.read_csv(_NODE_FEATURES_FILE)
+
 
 def load_json(path):
-    with open(path) as f:
+    with open(path, 'r') as f:
         data = json.load(f)
 
     return data
@@ -32,8 +206,8 @@ def load_level_data(data_path=None, level=0):
         data = json.load(f)
 
     output = {record['sites']: record for record in data if record['levels'] <= level}
-    print((f"Loaded {len(output)} nodes with records level <= {level} and child size:"
-           f"{sum([len(record['overlap_sites']) for record in output.values()])}"))
+    logger.info((f"Loaded {len(output)} nodes with records level <= {level} and child size:"
+                f"{sum([len(record['overlap_sites']) for record in output.values()])}"))
 
     return output
 
@@ -41,12 +215,10 @@ def load_level_data(data_path=None, level=0):
 def load_corpus(data_year):
     corpus_dir = 'emnlp2018' if data_year == '2018' else 'acl2020'
     corpus_path = _CORPUS_PATH.format(corpus_dir)
-    print(f'Loading corpus for {data_year} with path {corpus_path}/')
+    logger.info(f'Loading corpus for {data_year} with path {corpus_path}/')
 
-    with open(corpus_path, 'r') as f:
-        corpus = json.load(f)
+    return load_json(corpus_path)
 
-    return corpus
 
 def load_node2vec_model(model_name):
     return Word2Vec.load(os.path.join(_MODEL_STORAGE, model_name))
@@ -107,8 +279,8 @@ def get_referral_sites_edges(data):
                 if referral_site != base_url:
                     nodes.append((base_url, referral_site))
 
-    print('Node length:', len(nodes))
-    print('Distinct node length:', len(set(nodes)))
+    logger.info('Node length:', len(nodes))
+    logger.info('Distinct node length:', len(set(nodes)))
 
     return set(nodes)
 
@@ -139,7 +311,7 @@ def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, ad
 
     for f in referral_sites_files[:level + 1]:
         loaded_data = load_json(os.path.join(_ALEXA_DATA_PATH, f))
-        print(f'For file "{f}" -> load {len(loaded_data)} records')
+        logger.info(f'For file "{f}" -> load {len(loaded_data)} records')
         referral_sites.update(loaded_data)
 
     referral_sites_NODES = []
@@ -161,8 +333,8 @@ def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, ad
     else:
         audience_overlap_sites_NODES = create_nodes(audience_overlap_sites)
 
-    print('referral_sites node size:', len(referral_sites_NODES),
-          'audience_overlap node size:', len(audience_overlap_sites_NODES))
+    logger.info('referral_sites node size:', len(referral_sites_NODES),
+                'audience_overlap node size:', len(audience_overlap_sites_NODES))
 
     return audience_overlap_sites_NODES + referral_sites_NODES
 
@@ -238,4 +410,4 @@ def export_node2vec_as_feature(model_name, data_year='2020'):
     corpus_dir = 'emnlp2018' if data_year == '2018' else 'acl2020'
     feature_path = os.path.join(_FEATURES_DIR.format(corpus_dir), model_name.replace('.model', '.json'))
     dump_json(feature_path, feature)
-    print(f'Susseccully save feature to {feature_path}')
+    logger.info(f'Susseccully save feature to {feature_path}')
