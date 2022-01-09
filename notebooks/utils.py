@@ -339,13 +339,12 @@ def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, ad
     return audience_overlap_sites_NODES + referral_sites_NODES
 
 
-class ModelWrapper:
-    def __init__(self, name, embeddings_wv):
-        self.name = name
-        self.wv = embeddings_wv
+def export_model_as_feature(embedding, name, data_year='2020'):
+    corpus_dir = 'acl2020' if data_year == '2020' else 'emnlp2018'
+    feature_path = os.path.join(_FEATURES_DIR.format(corpus_dir=corpus_dir), f'{name}.json')
+    dump_json(feature_path, embedding)
 
-    def __str__(self):
-        return self.name
+    return feature_path
 
 
 def export_node2vec_as_feature(model_name, data_year='2020'):
