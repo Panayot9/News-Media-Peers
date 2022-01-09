@@ -52,13 +52,13 @@ int2label = {
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def log_params(args):
+def log_params(kwargs):
     params = {
-        'dataset': args.dataset,
-        'task': args.task,
-        'type_training': args.type_training,
-        'normalize_features': args.normalize_features,
-        'features': ", ".join(args.features)
+        'dataset': kwargs['dataset'],
+        'task': kwargs['task'],
+        'type_training': kwargs['type_training'],
+        'normalize_features': kwargs['normalize_features'],
+        'features': ", ".join(kwargs['features'])
     }
     mlflow.log_params(params)
 
@@ -70,10 +70,10 @@ def load_json(file_path):
     return data
 
 
-def load_prediction_file(file_path):
+def load_prediction_file(file_path, kwargs):
     with open(file_path, 'r') as f:
         csv_reader = csv.DictReader(f)
-        if args.task == 'fact':
+        if kwargs['task'] == 'fact':
             data = {row['source_url']: [float(row['low']), float(row['mixed']), float(row['high'])]
                     for row in csv_reader}
         else:
@@ -112,12 +112,12 @@ def calculate_metrics(actual, predicted):
 
 def train_model(splits: Dict[str, Dict[str, List[str]]],
                 features: Dict[str, Dict[str, List[float]]],
-                labels: Dict[str, str]):
+                labels: Dict[str, str], **kwargs):
     # create placeholders where predictions will be cumulated over the different folds
     all_urls = []
     actual = np.zeros(len(labels), dtype=np.int)
     predicted = np.zeros(len(labels), dtype=np.int)
-    probs = np.zeros((len(labels), args.num_labels), dtype=np.float)
+    probs = np.zeros((len(labels), kwargs['num_labels']), dtype=np.float)
 
     i = 0
     num_folds = len(splits)
@@ -148,7 +148,7 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
                                 for url in urls["test"]]).astype("float")
         y["test"] = np.array([labels[url] for url in urls["test"]], dtype=np.int)
 
-        if args.normalize_features:
+        if kwargs['normalize_features']:
             # normalize the features values
             scaler = MinMaxScaler()
             scaler.fit(X["train"])
@@ -184,8 +184,8 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
     f1, accuracy, flip_err, mae = calculate_metrics(actual, predicted)
 
     # map the actual and predicted labels to their categorical format
-    predicted = np.array([int2label[args.task][int(l)] for l in predicted])
-    actual = np.array([int2label[args.task][int(l)] for l in actual])
+    predicted = np.array([int2label[kwargs['task']][int(l)] for l in predicted])
+    actual = np.array([int2label[kwargs['task']][int(l)] for l in actual])
 
     # create a dictionary: the keys are the media, and the values are their actual and predicted labels
     predictions = {all_urls[i]: (actual[i], predicted[i]) for i in range(len(all_urls))}
@@ -195,22 +195,22 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
         "source_url": all_urls,
         "actual": actual,
         "predicted": predicted,
-        int2label[args.task][0]: probs[:, 0],
-        int2label[args.task][1]: probs[:, 1],
-        int2label[args.task][2]: probs[:, 2],
+        int2label[kwargs['task']][0]: probs[:, 0],
+        int2label[kwargs['task']][1]: probs[:, 1],
+        int2label[kwargs['task']][2]: probs[:, 2],
     })
-    columns = ["source_url", "actual", "predicted"] + [int2label[args.task][i] for i in range(args.num_labels)]
-    df_out.to_csv(os.path.join(out_dir, "predictions.tsv"), index=False, columns=columns)
+    columns = ["source_url", "actual", "predicted"] + [int2label[kwargs['task']][i] for i in range(kwargs['num_labels'])]
+    df_out.to_csv(os.path.join(kwargs['out_dir'], "predictions.tsv"), index=False, columns=columns)
 
     return f1, accuracy, flip_err, mae
 
 
-def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict[str, str]):
+def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict[str, str], **kwargs):
     # read the dataset
     df = pd.read_csv(corpus_path, sep="\t")
 
     # create a dictionary: the keys are the media and the values are their corresponding labels (transformed to int)
-    df['labels'] = df[args.task].apply(lambda x: label2int[args.task][x])
+    df['labels'] = df[kwargs['task']].apply(lambda x: label2int[kwargs['task']][x])
     labels = dict(df[['source_url_normalized', 'labels']].values.tolist())
 
     # load the evaluation splits
@@ -222,8 +222,10 @@ def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict
         loaded_features[feature] = load_json(feature_file)
 
     with mlflow.start_run():
-        log_params(args)
-        f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels)
+        log_params(kwargs)
+        f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels, num_labels=kwargs['num_labels'],
+                                                  task=kwargs['task'], out_dir=kwargs['out_dir'],
+                                                  normalize_features=kwargs['normalize_features'])
 
     # write the experiment results in a tabular format
     res = PrettyTable()
@@ -233,14 +235,14 @@ def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict
     res.add_column("MAE", [mae])
 
     # write the experiment summary and outcome into a text file and save it to the output directory
-    with open(os.path.join(out_dir, "results.txt"), "w") as f:
-        f.write(summary.get_string(title="Experiment Summary") + "\n")
+    with open(os.path.join(kwargs['out_dir'], "results.txt"), "w") as f:
+        f.write(kwargs['summary'].get_string(title="Experiment Summary") + "\n")
         f.write(res.get_string(title="Results"))
 
     return f1, accuracy, flip_err, mae
 
 
-def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict[str, str]):
+def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict[str, str], **kwargs):
     """Uses the results from previously trained SVM classifier's probabilities for the three classes
     with different features.
 
@@ -262,7 +264,7 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
     df = pd.read_csv(corpus_path, sep="\t")
 
     # create a dictionary: the keys are the media and the values are their corresponding labels (transformed to int)
-    df['labels'] = df[args.task].apply(lambda x: label2int[args.task][x])
+    df['labels'] = df[kwargs['task']].apply(lambda x: label2int[kwargs['task']][x])
     labels = dict(df[['source_url_normalized', 'labels']].values.tolist())
 
     # load the evaluation splits
@@ -270,11 +272,13 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
 
     loaded_features = {}
     for feature, feature_file in feature_files.items():
-        loaded_features[feature] = load_prediction_file(feature_file)
+        loaded_features[feature] = load_prediction_file(feature_file, kwargs)
 
     with mlflow.start_run():
-        log_params(args)
-        f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels)
+        log_params(kwargs)
+        f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels, num_labels=kwargs['num_labels'],
+                                                  task=kwargs['task'], out_dir=kwargs['out_dir'],
+                                                  normalize_features=kwargs['normalize_features'])
 
     # write the experiment results in a tabular format
     res = PrettyTable()
@@ -284,8 +288,8 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
     res.add_column("MAE", [mae])
 
     # write the experiment summary and outcome into a text file and save it to the output directory
-    with open(os.path.join(out_dir, "results.txt"), "w") as f:
-        f.write(summary.get_string(title="Experiment Summary") + "\n")
+    with open(os.path.join(kwargs['out_dir'], "results.txt"), "w") as f:
+        f.write(kwargs['summary'].get_string(title="Experiment Summary") + "\n")
         f.write(res.get_string(title="Results"))
 
     return f1, accuracy, flip_err, mae
@@ -353,50 +357,50 @@ def parse_arguments():
     return parser.parse_args()
 
 
-if __name__ == "__main__":
-
-    # parse the command-line arguments
-    args = parse_arguments()
-
-    if not args.features:
+def run_experiment(features="", task="fact", dataset="acl2020", num_labels=3,
+                   type_training="combine", clear_cache=True, normalize_features=True):
+    if not features:
         raise ValueError("No Features are specified")
 
     # create the list of features sorted alphabetically
-    args.features = sorted([feature.strip() for feature in args.features.split(",")])
+    features = sorted([feature.strip() for feature in features.split(",")])
 
     # display the experiment summary in a tabular format
     summary = PrettyTable()
-    summary.add_column("task", [args.task])
+    summary.add_column("task", [task])
     summary.add_column("classification_mode", ["single classifier"])
-    summary.add_column("type_training", [args.type_training])
-    summary.add_column("normalize_features", [args.normalize_features])
-    summary.add_column("features", [", ".join(args.features)])
+    summary.add_column("type_training", [type_training])
+    summary.add_column("normalize_features", [normalize_features])
+    summary.add_column("features", [", ".join(features)])
     print(summary)
 
-    corpus_path = os.path.join(PROJECT_DIR, "data", args.dataset, "corpus.tsv")
-    splits_file = os.path.join(PROJECT_DIR, "data", args.dataset, "splits.json")
+    corpus_path = os.path.join(PROJECT_DIR, "data", dataset, "corpus.tsv")
+    splits_file = os.path.join(PROJECT_DIR, "data", dataset, "splits.json")
 
-    if args.type_training == "combine":
+    if type_training == "combine":
         # specify the output directory where the results will be stored
-        out_dir = os.path.join(PROJECT_DIR, "data", args.dataset, "results", f"{args.task}_{','.join(args.features)}")
+        out_dir = os.path.join(PROJECT_DIR, "data", dataset, "results", f"{task}_{','.join(features)}")
 
         # remove the output directory (if it already exists and args.clear_cache was set to TRUE)
-        shutil.rmtree(out_dir) if args.clear_cache and os.path.exists(out_dir) else None
+        shutil.rmtree(out_dir) if clear_cache and os.path.exists(out_dir) else None
 
         # create the output directory
         os.makedirs(out_dir, exist_ok=True)
 
-        feature_files = {feature: os.path.join(PROJECT_DIR, "data", args.dataset, "features", f"{feature}.json")
-                         for feature in args.features}
+        feature_files = {feature: os.path.join(PROJECT_DIR, "data", dataset, "features", f"{feature}.json")
+                         for feature in features}
 
-        f1, accuracy, flip_err, mae = train_combined_model(corpus_path, splits_file, feature_files)
+        f1, accuracy, flip_err, mae = train_combined_model(corpus_path, splits_file, feature_files,
+                                                           task=task, dataset=dataset, type_training=type_training,
+                                                           normalize_features=normalize_features, features=features,
+                                                           num_labels=num_labels, out_dir=out_dir, summary=summary)
 
-    elif args.type_training == "ensemble":
+    elif type_training == "ensemble":
         now = datetime.now()
 
         # specify the output directory where the results will be stored
-        out_dir = os.path.join(PROJECT_DIR, "data", args.dataset, 'results',
-                               f"ensemble_{args.task}_{','.join(args.features)}_{now.strftime('%Y%m%d')}")
+        out_dir = os.path.join(PROJECT_DIR, "data", dataset, 'results',
+                               f"ensemble_{task}_{','.join(features)}_{now.strftime('%Y%m%d')}")
 
         # remove the output directory (if it already exists and args.clear_cache was set to TRUE)
         # shutil.rmtree(out_dir) if args.clear_cache and os.path.exists(out_dir) else None
@@ -404,12 +408,12 @@ if __name__ == "__main__":
         # create the output directory
         os.makedirs(out_dir, exist_ok=True)
 
-        result_dir = os.path.join(PROJECT_DIR, "data", args.dataset, "results")
-        features = [f'{args.task}_{feature}' for feature in args.features]
+        result_dir = os.path.join(PROJECT_DIR, "data", dataset, "results")
+        features = [f'{task}_{feature}' for feature in features]
 
         features_files = {}
-        for feature in args.features:
-            feature_folder = f'{args.task}_{feature}'
+        for feature in features:
+            feature_folder = f'{task}_{feature}'
             if feature_folder not in os.listdir(result_dir):
                 raise ValueError(F"Feature '{feature_folder}' was not generated.Please run the code in 'combine' type_training for generating it.")
 
@@ -418,9 +422,12 @@ if __name__ == "__main__":
 
             features_files[feature] = os.path.join(result_dir, feature_folder, 'predictions.tsv')
 
-        f1, accuracy, flip_err, mae = train_ensemble_model(corpus_path, splits_file, features_files)
+        f1, accuracy, flip_err, mae = train_ensemble_model(corpus_path, splits_file, features_files,
+                                                           task=task, dataset=dataset, type_training=type_training,
+                                                           normalize_features=normalize_features, features=features,
+                                                           num_labels=num_labels, out_dir=out_dir, summary=summary)
     else:
-        raise ValueError(f"Unsupported type_training ('{args.type_training}'). Supported ones are 'combine' or 'ensemble'!")
+        raise ValueError(f"Unsupported type_training ('{type_training}'). Supported ones are 'combine' or 'ensemble'!")
 
     summary.add_column("Macro-F1", [f1])
     summary.add_column("Accuracy", [accuracy])
@@ -428,3 +435,10 @@ if __name__ == "__main__":
     summary.add_column("MAE", [mae])
 
     print(summary)
+
+
+if __name__ == "__main__":
+    # parse the command-line arguments
+    args = parse_arguments()
+
+    run_experiment(**args)
