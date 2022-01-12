@@ -441,5 +441,6 @@ def run_experiment(features="", task="fact", dataset="acl2020", num_labels=3,
 if __name__ == "__main__":
     # parse the command-line arguments
     args = parse_arguments()
+    args = vars(args)
 
     run_experiment(**args)
