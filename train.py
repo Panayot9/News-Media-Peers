@@ -54,6 +54,7 @@ mlflow.set_tracking_uri(f"file://{PROJECT_DIR}/mlruns")
 
 
 def log_params(kwargs):
+    """Log the parameters of the experiment to mlflow."""
     params = {
         'dataset': kwargs['dataset'],
         'task': kwargs['task'],
@@ -297,6 +298,7 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
 
 
 def parse_arguments():
+    """Parse commadline arguments."""
     parser = argparse.ArgumentParser()
 
     # Required command-line arguments
@@ -355,11 +357,25 @@ def parse_arguments():
         help="Indicates what type of model training to do. Possible values are: 'combine', 'ensemble'",
     )
 
-    return parser.parse_args()
+    return vars(parser.parse_args())  # cast to dict
 
 
-def run_experiment(features="", task="fact", dataset="acl2020", num_labels=3,
-                   type_training="combine", clear_cache=True, normalize_features=True):
+def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl2020", num_labels: int = 3,
+                   type_training: str = "combine", clear_cache: bool = True, normalize_features: bool = False):
+    """Ren classifier traning usign input arguments.
+
+    Args:
+        features (str): the features that will be used in the current experiment (comma-separated)
+        task (str): the task for which the model is trained: (fact or bias)
+        dataset (str): the name of the dataset for which we are building the media objects
+        num_labels (int): the number of classes of the given task
+        type_training (str): Indicates what type of model training to do. Possible values are: 'combine', 'ensemble'
+        clear_cache (bool): flag to whether the corresponding features file need to be deleted before re-computing
+        normalize_features (bool): flag whether to normalize input features. In the case of ensemble it's better to be false
+
+    Execption:
+        ValueError: if the "type_training" is not one of the possible values.
+    """
     if not features:
         raise ValueError("No Features are specified")
 
@@ -441,6 +457,5 @@ def run_experiment(features="", task="fact", dataset="acl2020", num_labels=3,
 if __name__ == "__main__":
     # parse the command-line arguments
     args = parse_arguments()
-    args = vars(args)
 
     run_experiment(**args)
