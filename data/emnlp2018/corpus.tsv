@@ -17,7 +17,7 @@ https://popularresistance.org/	popularresistance.org	https://mediabiasfactcheck.
 https://www.thebeaverton.com/	thebeaverton.com	http://mediabiasfactcheck.com/the-beaverton/	low	center
 http://nationalreport.net/	nationalreport.net	http://mediabiasfactcheck.com/national-report/	low	center
 https://politicalmayhem.news	politicalmayhem.news	https://mediabiasfactcheck.com/political-mayhem-news/	low	extreme-right
-http://www.itv.com/news/	itv.com-news	http://mediabiasfactcheck.com/itv-news/	high	right-center
+http://www.itv.com/news/	itv.com	http://mediabiasfactcheck.com/itv-news/	high	right-center
 http://www.breitbart.com/	breitbart.com	http://mediabiasfactcheck.com/breitbart/	mixed	right
 http://www.forwardprogressives.com/	forwardprogressives.com	http://mediabiasfactcheck.com/forward-progressives/	high	left
 https://triggerreset.net	triggerreset.net	https://mediabiasfactcheck.com/triggerreset/	low	extreme-right
@@ -31,7 +31,7 @@ http://france24-tv.com/	france24-tv.com	https://mediabiasfactcheck.com/france24-
 http://freewestmedia.com/	freewestmedia.com	http://mediabiasfactcheck.com/free-west-media/	mixed	right
 https://theguardiansofdemocracy.com/	theguardiansofdemocracy.com	https://mediabiasfactcheck.com/guardians-of-democracy/	high	left
 http://www.darientimes.com/	darientimes.com	https://mediabiasfactcheck.com/darien-times/	high	left-center
-https://www.conservativeoutfitters.com/blogs/news	conservativeoutfitters.com-blogs-news	http://mediabiasfactcheck.com/conservative-outfitters/	mixed	right
+https://www.conservativeoutfitters.com/blogs/news	conservativeoutfitters.com	http://mediabiasfactcheck.com/conservative-outfitters/	mixed	right
 http://www.republicworld.com/	republicworld.com	https://mediabiasfactcheck.com/republic-world/	mixed	left-center
 http://www.timesheadline.com	timesheadline.com	https://mediabiasfactcheck.com/times-headline/	mixed	left-center
 http://www.amazingnews.net/	amazingnews.net	https://mediabiasfactcheck.com/amazingnews-net/	low	extreme-right
@@ -54,7 +54,7 @@ http://www.theskimm.com/	theskimm.com	http://mediabiasfactcheck.com/the-skimm/	h
 https://iowastartingline.com	iowastartingline.com	https://mediabiasfactcheck.com/iowa-starting-line/	high	left
 http://deepleftfield.info/	deepleftfield.info	https://mediabiasfactcheck.com/deep-left-field/	mixed	left
 http://www.burrardstreetjournal.com/	burrardstreetjournal.com	http://mediabiasfactcheck.com/burrard-street-journal/	low	center
-http://www.who.int/en/	who.int-en	http://mediabiasfactcheck.com/world-health-organization-who/	high	center
+http://www.who.int/en/	who.int	http://mediabiasfactcheck.com/world-health-organization-who/	high	center
 https://www.propublica.org/	propublica.org	http://mediabiasfactcheck.com/propublica/	high	left-center
 http://yellowhammernews.com/	yellowhammernews.com	http://mediabiasfactcheck.com/yellowhammer-news/	high	right
 http://news.groopspeak.com/	news.groopspeak.com	http://mediabiasfactcheck.com/groopspeak/	mixed	left
@@ -99,7 +99,7 @@ https://viralcords.com/	viralcords.com	http://mediabiasfactcheck.com/viral-cords
 http://www.climatecentral.org/	climatecentral.org	http://mediabiasfactcheck.com/climate-central/	high	center
 http://siouxcityjournal.com/	siouxcityjournal.com	https://mediabiasfactcheck.com/sioux-city-journal/	high	center
 https://www.commentarymagazine.com/	commentarymagazine.com	http://mediabiasfactcheck.com/commentary-magazine/	high	right
-https://www.themaven.net/beingliberal	themaven.net-beingliberal	https://mediabiasfactcheck.com/being-liberal/	mixed	left
+https://www.themaven.net/beingliberal	themaven.net	https://mediabiasfactcheck.com/being-liberal/	mixed	left
 https://www.cpj.org/	cpj.org	http://mediabiasfactcheck.com/committee-to-protect-journalists/	high	center
 http://www.adelaidenow.com.au/	adelaidenow.com.au	https://mediabiasfactcheck.com/the-advertiser/	mixed	right
 http://www.epi.org/	epi.org	https://mediabiasfactcheck.com/economic-policy-institute/	high	left-center
@@ -133,7 +133,7 @@ http://babylonbee.com/	babylonbee.com	http://mediabiasfactcheck.com/babylon-bee/
 http://www.polygraph.info/	polygraph.info	http://mediabiasfactcheck.com/polygraph-info/	high	center
 http://conservativebyte.com	conservativebyte.com	https://mediabiasfactcheck.com/conservative-byte/	low	extreme-right
 https://fas.org/	fas.org	http://mediabiasfactcheck.com/federation-of-american-scientists-fas/	high	center
-http://www.al-monitor.com/pulse/home.html	al-monitor.com-pulse-home.html	http://mediabiasfactcheck.com/al-monitor/	high	left-center
+http://www.al-monitor.com/pulse/home.html	al-monitor.com	http://mediabiasfactcheck.com/al-monitor/	high	left-center
 http://secondnexus.com/	secondnexus.com	http://mediabiasfactcheck.com/second-nexus/	mixed	left-center
 http://www.nwitimes.com	nwitimes.com	https://mediabiasfactcheck.com/northwest-indiana-times/	high	center
 http://www.morningstaronline.co.uk/	morningstaronline.co.uk	http://mediabiasfactcheck.com/the-morning-star/	high	left
@@ -166,7 +166,6 @@ http://firstinfreedomdaily.com/	firstinfreedomdaily.com	https://mediabiasfactche
 http://www.fresnobee.com/	fresnobee.com	http://mediabiasfactcheck.com/fresno-bee/	high	left-center
 http://www.americanpatriotdaily.com/	americanpatriotdaily.com	http://mediabiasfactcheck.com/american-patriot-daily/	low	extreme-right
 http://www.helsinkitimes.fi/	helsinkitimes.fi	http://mediabiasfactcheck.com/helsinki-times/	high	left-center
-http://www.pri.org/programs/globalpost	pri.org-programs-globalpost	http://mediabiasfactcheck.com/global-post/	high	left-center
 http://www.tribunemagazine.org/	tribunemagazine.org	http://mediabiasfactcheck.com/tribune-magazine-uk/	high	left
 http://www.dailywire.com/	dailywire.com	http://mediabiasfactcheck.com/the-daily-wire/	mixed	right
 http://bismarcktribune.com	bismarcktribune.com	https://mediabiasfactcheck.com/bismarck-tribune/	high	center
@@ -195,7 +194,7 @@ http://metro.co.uk/	metro.co.uk	http://mediabiasfactcheck.com/metro-uk/	high	lef
 https://www.thepublicdiscourse.com/	thepublicdiscourse.com	https://mediabiasfactcheck.com/witherspoon-institute/	low	extreme-right
 http://www.ocregister.com/	ocregister.com	http://mediabiasfactcheck.com/orange-county-register/	high	right-center
 https://www.taxjustice.net/	taxjustice.net	https://mediabiasfactcheck.com/tax-justice-network/	high	left-center
-https://www.theguardian.com/observer	theguardian.com-observer	http://mediabiasfactcheck.com/the-observer/	high	left-center
+https://www.theguardian.com/observer	theguardian.com	http://mediabiasfactcheck.com/the-observer/	high	left-center
 http://www.dailyprogress.com	dailyprogress.com	https://mediabiasfactcheck.com/the-daily-progress/	high	center
 http://libcom.org	libcom.org	https://mediabiasfactcheck.com/libcom-org/	high	left
 http://www.zeit.de/english/index	zeit.de	https://mediabiasfactcheck.com/die-zeit/	high	left-center
@@ -244,7 +243,6 @@ http://www.pgpf.org/	pgpf.org	http://mediabiasfactcheck.com/peterson-foundation/
 http://realnewsrightnow.com/	realnewsrightnow.com	http://mediabiasfactcheck.com/real-news-right-now/	low	center
 http://progresstribune.com/	progresstribune.com	http://mediabiasfactcheck.com/progress-tribune/	low	extreme-left
 http://rightweb.irc-online.org	rightweb.irc-online.org	https://mediabiasfactcheck.com/right-web/	high	left-center
-http://www.mlive.com/grand-rapids/#/0	mlive.com-grand-rapids-#-0	http://mediabiasfactcheck.com/grand-rapids-press/	high	right-center
 http://www.providencejournal.com/	providencejournal.com	http://mediabiasfactcheck.com/the-providence-journal/	high	left-center
 http://jewishbreakingnews.com	jewishbreakingnews.com	https://mediabiasfactcheck.com/jewish-breaking-news/	mixed	right-center
 http://www.truth-out.org/	truth-out.org	http://mediabiasfactcheck.com/truth-out/	mixed	left
@@ -369,22 +367,22 @@ http://thepeoplestruth.com/	thepeoplestruth.com	https://mediabiasfactcheck.com/t
 http://www.financialexpress.com/	financialexpress.com	http://mediabiasfactcheck.com/financial-express/	high	center
 https://conservativedailypost.com/	conservativedailypost.com	http://mediabiasfactcheck.com/conservative-daily-post/	low	extreme-right
 http://www.smirkingchimp.com/	smirkingchimp.com	https://mediabiasfactcheck.com/smirking-chimp/	high	left
-http://www.pacificresearch.org/home/	pacificresearch.org-home	http://mediabiasfactcheck.com/pacific-research-institute/	high	right-center
+http://www.pacificresearch.org/home/	pacificresearch.org	http://mediabiasfactcheck.com/pacific-research-institute/	high	right-center
 http://truthbetold.news/	truthbetold.news	http://mediabiasfactcheck.com/truth-be-told/	high	center
 http://thepeoplescube.com	thepeoplescube.com	https://mediabiasfactcheck.com/the-peoples-cube/	low	center
 http://patrioticviralnews.com/	patrioticviralnews.com	http://mediabiasfactcheck.com/patriotic-viral-news/	low	extreme-right
 http://www.thenewcivilrightsmovement.com/	thenewcivilrightsmovement.com	http://mediabiasfactcheck.com/the-new-civil-rights-movement/	mixed	left
 http://www.bipartisanreport.com/	bipartisanreport.com	http://mediabiasfactcheck.com/bipartisan-report/	low	extreme-left
 http://www.viralthread.com/	viralthread.com	https://mediabiasfactcheck.com/viral-thread/	mixed	center
-https://concernedwomen.org/blog/	concernedwomen.org-blog	https://mediabiasfactcheck.com/concerned-women-america/	low	extreme-right
+https://concernedwomen.org/blog/	concernedwomen.org	https://mediabiasfactcheck.com/concerned-women-america/	low	extreme-right
 http://thehardtimes.net/	thehardtimes.net	http://mediabiasfactcheck.com/the-hard-times/	low	center
 http://trib.com	trib.com	https://mediabiasfactcheck.com/casper-star-tribune/	high	center
 https://ntknetwork.com	ntknetwork.com	https://mediabiasfactcheck.com/ntk-network/	mixed	right
 http://www.thatsnonsense.com/	thatsnonsense.com	http://mediabiasfactcheck.com/thats-nonsense/	high	center
 http://www.denverpost.com/	denverpost.com	http://mediabiasfactcheck.com/denver-post/	high	left-center
-http://www.telesurtv.net/english/	telesurtv.net-english	http://mediabiasfactcheck.com/telesur/	mixed	left
+http://www.telesurtv.net/english/	telesurtv.net	http://mediabiasfactcheck.com/telesur/	mixed	left
 http://www.metro.us/	metro.us	http://mediabiasfactcheck.com/metro/	high	left-center
-http://www.npr.org/sections/news/	npr.org-sections-news	http://mediabiasfactcheck.com/npr/	high	left-center
+http://www.npr.org/sections/news/	npr.org	http://mediabiasfactcheck.com/npr/	high	left-center
 https://judicialnetwork.com/	judicialnetwork.com	http://mediabiasfactcheck.com/judicial-crisis-network/	mixed	right
 http://www.dailykos.com/	dailykos.com	http://mediabiasfactcheck.com/daily-kos/	mixed	left
 http://speisa.com/	speisa.com	https://mediabiasfactcheck.com/speisa/	low	extreme-right
@@ -392,7 +390,7 @@ http://montrealgazette.com/	montrealgazette.com	http://mediabiasfactcheck.com/mo
 https://www.thequint.com/	thequint.com	https://mediabiasfactcheck.com/the-quint/	mixed	right-center
 http://outlook.monmouth.edu/	outlook.monmouth.edu	http://mediabiasfactcheck.com/the-outlook-monmouth-university/	high	center
 https://aclj.org/	aclj.org	https://mediabiasfactcheck.com/american-center-law-justice-aclj/	mixed	right
-http://elpais.com/elpais/inenglish.html	elpais.com-elpais-inenglish.html	http://mediabiasfactcheck.com/el-pais/	high	left-center
+http://elpais.com/elpais/inenglish.html	elpais.com	http://mediabiasfactcheck.com/el-pais/	high	left-center
 https://tytnetwork.com/	tytnetwork.com	http://mediabiasfactcheck.com/the-young-turks/	high	left
 https://www.geneticliteracyproject.org/	geneticliteracyproject.org	http://mediabiasfactcheck.com/genetic-literacy-project/	high	center
 https://nowthisnews.com/	nowthisnews.com	http://mediabiasfactcheck.com/nowthis-news/	mixed	left
@@ -436,7 +434,7 @@ http://www.gopusa.com/	gopusa.com	https://mediabiasfactcheck.com/gopusa/	mixed	r
 https://www.icij.org/	icij.org	http://mediabiasfactcheck.com/international-consortium-of-investigative-journalists/	high	center
 http://www.9news.com.au/	9news.com.au	http://mediabiasfactcheck.com/9-news-australia/	high	right-center
 https://newint.org/	newint.org	http://mediabiasfactcheck.com/new-internationalist/	high	left
-http://www.inquisitr.com/news/	inquisitr.com-news	http://mediabiasfactcheck.com/inquisitr/	mixed	left-center
+http://www.inquisitr.com/news/	inquisitr.com	http://mediabiasfactcheck.com/inquisitr/	mixed	left-center
 https://www.fwweekly.com/	fwweekly.com	https://mediabiasfactcheck.com/fort-worth-weekly/	high	left-center
 https://www.consumerreports.org	consumerreports.org	https://mediabiasfactcheck.com/consumer-reports/	high	center
 http://trueviralnews.com/	trueviralnews.com	https://mediabiasfactcheck.com/true-viral-news/	high	center
@@ -452,7 +450,7 @@ http://www.syriana-analysis.com	syriana-analysis.com	https://mediabiasfactcheck.
 http://www.jordantimes.com/	jordantimes.com	https://mediabiasfactcheck.com/the-jordan-times/	high	center
 https://www.opednews.com/	opednews.com	http://mediabiasfactcheck.com/opednews-oen/	mixed	left
 http://www.lohud.com/	lohud.com	http://mediabiasfactcheck.com/the-journal-news/	high	left-center
-http://www.cato.org/regulation/	cato.org-regulation	http://mediabiasfactcheck.com/regulation-magazine/	mixed	right-center
+http://www.cato.org/regulation/	cato.org	http://mediabiasfactcheck.com/regulation-magazine/	mixed	right-center
 http://www.clickhole.com/	clickhole.com	http://mediabiasfactcheck.com/clickhole/	low	center
 http://grist.org/	grist.org	http://mediabiasfactcheck.com/grist/	high	left-center
 http://www.wnd.com/	wnd.com	http://mediabiasfactcheck.com/world-net-daily-wnd/	mixed	right
@@ -475,7 +473,7 @@ http://canadafreepress.com/	canadafreepress.com	http://mediabiasfactcheck.com/ca
 https://rantt.com	rantt.com	https://mediabiasfactcheck.com/rantt-media/	high	left
 http://www.americansforprosperity.org	americansforprosperity.org	http://mediabiasfactcheck.com/americans-for-prosperity/	mixed	right
 http://medicalxpress.com/	medicalxpress.com	http://mediabiasfactcheck.com/medicalxpress/	high	center
-http://www.jpost.com/Jerusalem-Report	jpost.com-Jerusalem-Report	http://mediabiasfactcheck.com/the-jerusalem-report/	high	left-center
+http://www.jpost.com/Jerusalem-Report	jpost.com	http://mediabiasfactcheck.com/the-jerusalem-report/	high	left-center
 https://www.courthousenews.com	courthousenews.com	https://mediabiasfactcheck.com/courthouse-news-service/	high	center
 http://chicagoreporter.com/	chicagoreporter.com	http://mediabiasfactcheck.com/the-chicago-reporter/	high	left-center
 https://www.aei.org/	aei.org	http://mediabiasfactcheck.com/american-enterprise-institute/	mixed	right
@@ -596,7 +594,7 @@ http://defiantamerica.com/	defiantamerica.com	https://mediabiasfactcheck.com/def
 http://www.rollcall.com/	rollcall.com	http://mediabiasfactcheck.com/roll-call/	high	center
 https://teddystick.com/	teddystick.com	http://mediabiasfactcheck.com/teddy-stick/	low	extreme-right
 https://sandiegofreepress.org/	sandiegofreepress.org	https://mediabiasfactcheck.com/san-diego-free-press/	high	left-center
-http://therealnews.com/t2/	therealnews.com-t2	http://mediabiasfactcheck.com/real-news-network/	high	left-center
+http://therealnews.com/t2/	therealnews.com	http://mediabiasfactcheck.com/real-news-network/	high	left-center
 http://www.nationofchange.org/	nationofchange.org	http://mediabiasfactcheck.com/nation-of-change/	mixed	left
 https://ricochet.com	ricochet.com	https://mediabiasfactcheck.com/richochet/	mixed	right
 http://www.citizen-times.com/	citizen-times.com	http://mediabiasfactcheck.com/asheville-citizen-times/	high	left-center
@@ -610,7 +608,7 @@ http://www.saudigazette.com.sa	saudigazette.com.sa	https://mediabiasfactcheck.co
 http://www.opposingviews.com/	opposingviews.com	http://mediabiasfactcheck.com/opposing-views/	high	left-center
 http://listverse.com/	listverse.com	http://mediabiasfactcheck.com/listverse/	high	center
 http://www.theaustralian.com.au/	theaustralian.com.au	http://mediabiasfactcheck.com/the-australian/	high	right-center
-http://www.oregonlive.com/#/0	oregonlive.com-#-0	http://mediabiasfactcheck.com/oregonian/	high	right-center
+http://www.oregonlive.com/#/0	oregonlive.com	http://mediabiasfactcheck.com/oregonian/	high	right-center
 http://washingtonpress.com	washingtonpress.com	https://mediabiasfactcheck.com/washington-press/	mixed	left
 http://news.abs-cbn.com/	news.abs-cbn.com	https://mediabiasfactcheck.com/abs-cbn-news/	high	center
 http://www.hangthebankers.com/	hangthebankers.com	http://mediabiasfactcheck.com/hang-the-bankers/	low	extreme-right
@@ -624,7 +622,7 @@ https://www.alaraby.co.uk/english	alaraby.co.uk	https://mediabiasfactcheck.com/t
 http://journalstar.com/	journalstar.com	https://mediabiasfactcheck.com/lincoln-journal-star/	high	center
 https://this.org/	this.org	http://mediabiasfactcheck.com/this-magazine/	high	left
 https://www.ced.org/	ced.org	http://mediabiasfactcheck.com/committee-for-economic-development/	high	center
-http://www.rfa.org/english/	rfa.org-english	http://mediabiasfactcheck.com/radio-free-asia/	high	left-center
+http://www.rfa.org/english/	rfa.org	http://mediabiasfactcheck.com/radio-free-asia/	high	left-center
 http://filmingcops.com/	filmingcops.com	http://mediabiasfactcheck.com/filming-cops/	high	left
 https://stonecoldtruth.com/	stonecoldtruth.com	https://mediabiasfactcheck.com/stone-cold-truth/	low	extreme-right
 http://spiked-online.com/	spiked-online.com	http://mediabiasfactcheck.com/spiked-magazine/	mixed	right
@@ -640,7 +638,6 @@ https://remnantnewspaper.com	remnantnewspaper.com	https://mediabiasfactcheck.com
 http://guardianlv.com/	guardianlv.com	http://mediabiasfactcheck.com/guardian-liberty-voice/	high	left
 http://unclesamsmisguidedchildren.com/	unclesamsmisguidedchildren.com	http://mediabiasfactcheck.com/uncle-sams-misguided-children/	low	extreme-right
 https://www.thewrap.com	thewrap.com	https://mediabiasfactcheck.com/thewrap/	mixed	center
-https://www.yahoo.com/news/?ref=gs	yahoo.com-news-?ref=gs	http://mediabiasfactcheck.com/yahoo-news/	mixed	left-center
 http://www.cnn.com/	cnn.com	http://mediabiasfactcheck.com/cnn/	mixed	left
 https://ageofshitlords.com/	ageofshitlords.com	http://mediabiasfactcheck.com/age-of-shitlords/	low	right
 http://undergroundjournalist.org/	undergroundjournalist.org	https://mediabiasfactcheck.com/underground-journalist/	low	extreme-left
@@ -660,9 +657,9 @@ http://cityandstateny.com/	cityandstateny.com	http://mediabiasfactcheck.com/city
 http://www.teapartypatriots.org/	teapartypatriots.org	http://mediabiasfactcheck.com/tea-party-patriots/	high	right
 http://historynewsnetwork.org/	historynewsnetwork.org	http://mediabiasfactcheck.com/history-news-network/	high	left-center
 http://defund.com/	defund.com	https://mediabiasfactcheck.com/defund-com/	low	extreme-right
-http://people.com/politics/	people.com-politics	http://mediabiasfactcheck.com/people-magazine/	high	left
+http://people.com/politics/	people.com	http://mediabiasfactcheck.com/people-magazine/	high	left
 http://www.oann.com/	oann.com	http://mediabiasfactcheck.com/one-america-news-network/	mixed	right
-https://zcomm.org/zmag/	zcomm.org-zmag	http://mediabiasfactcheck.com/z-magazine/	high	left
+https://zcomm.org/zmag/	zcomm.org	http://mediabiasfactcheck.com/z-magazine/	high	left
 http://theblacksphere.net/	theblacksphere.net	http://mediabiasfactcheck.com/the-blacksphere-kevin-jackson/	mixed	right
 https://stocknewsusa.com	stocknewsusa.com	http://mediabiasfactcheck.com/stock-news-usa/	high	center
 http://www.cctv-america.com/	cctv-america.com	http://mediabiasfactcheck.com/cctv-america/	high	left-center
@@ -677,9 +674,9 @@ https://www.earthmagazine.org/	earthmagazine.org	http://mediabiasfactcheck.com/e
 http://news.trust.org/	news.trust.org	http://mediabiasfactcheck.com/thomson-reuters-foundation/	high	left-center
 https://www.libertynation.com	libertynation.com	https://mediabiasfactcheck.com/liberty-nation/	high	right
 http://www.eagletribune.com/	eagletribune.com	http://mediabiasfactcheck.com/eagle-tribune/	high	center
-http://russia-insider.com/en	russia-insider.com-en	http://mediabiasfactcheck.com/russia-insider/	mixed	right-center
+http://russia-insider.com/en	russia-insider.com	http://mediabiasfactcheck.com/russia-insider/	mixed	right-center
 http://alphanewsmn.com/	alphanewsmn.com	https://mediabiasfactcheck.com/alpha-news/	mixed	right
-http://www.nola.com/#/0	nola.com-#-0	http://mediabiasfactcheck.com/the-times-picayune/	high	left-center
+http://www.nola.com/#/0	nola.com	http://mediabiasfactcheck.com/the-times-picayune/	high	left-center
 http://www.alhayat.com/	alhayat.com	https://mediabiasfactcheck.com/al-hayat/	high	left-center
 http://www.roanoke.com/	roanoke.com	http://mediabiasfactcheck.com/roanoke-times/	high	left-center
 http://louderwithcrowder.com/	louderwithcrowder.com	http://mediabiasfactcheck.com/louder-with-crowder/	mixed	right
@@ -737,7 +734,7 @@ https://www.defendevropa.org	defendevropa.org	https://mediabiasfactcheck.com/def
 http://www.yesmagazine.org/	yesmagazine.org	https://mediabiasfactcheck.com/yes-magazine/	high	left
 http://stimson.org/	stimson.org	http://mediabiasfactcheck.com/stimson-center/	high	center
 http://www.peacock-panache.com	peacock-panache.com	https://mediabiasfactcheck.com/peacock-panache/	high	left
-http://host.madison.com/wsj/	host.madison.com-wsj	https://mediabiasfactcheck.com/wisconsin-state-journal/	high	center
+http://host.madison.com/wsj/	host.madison.com	https://mediabiasfactcheck.com/wisconsin-state-journal/	high	center
 http://upr.org	upr.org	https://mediabiasfactcheck.com/utah-public-radio-upr/	high	left-center
 http://uproxx.com/	uproxx.com	http://mediabiasfactcheck.com/uproxx/	high	left
 http://sputniknews.com/	sputniknews.com	http://mediabiasfactcheck.com/sputnik-news/	mixed	right-center
@@ -747,7 +744,7 @@ http://earthfirstjournal.org/	earthfirstjournal.org	http://mediabiasfactcheck.co
 http://www.libertyheadlines.com/	libertyheadlines.com	https://mediabiasfactcheck.com/liberty-headlines/	mixed	right
 https://freetelegraph.com/	freetelegraph.com	https://mediabiasfactcheck.com/the-free-telegraph/	low	right
 http://dandygoat.com/	dandygoat.com	http://mediabiasfactcheck.com/the-dandy-goat/	low	center
-http://www.conservapedia.com/Main_Page	conservapedia.com-Main_Page	http://mediabiasfactcheck.com/conservapedia/	low	extreme-right
+http://www.conservapedia.com/Main_Page	conservapedia.com	http://mediabiasfactcheck.com/conservapedia/	low	extreme-right
 http://www.strategic-culture.org/	strategic-culture.org	http://mediabiasfactcheck.com/strategic-culture-foundation/	high	right-center
 http://www.resourcegovernance.org/	resourcegovernance.org	http://mediabiasfactcheck.com/natural-resource-governance-institute/	high	left-center
 http://theamericanmirror.com/	theamericanmirror.com	http://mediabiasfactcheck.com/the-american-mirror/	low	extreme-right
@@ -789,7 +786,7 @@ http://www.ejinsight.com/	ejinsight.com	https://mediabiasfactcheck.com/ej-insigh
 http://factbox.tv/	factbox.tv	https://mediabiasfactcheck.com/factbox-tv/	high	left-center
 https://www.avoiceformen.com/	avoiceformen.com	http://mediabiasfactcheck.com/a-voice-for-men/	low	extreme-right
 http://christwire.org/	christwire.org	http://mediabiasfactcheck.com/christwire/	low	center
-http://www.futureinamerica.com/news	futureinamerica.com-news	http://mediabiasfactcheck.com/future-in-america/	mixed	right
+http://www.futureinamerica.com/news	futureinamerica.com	http://mediabiasfactcheck.com/future-in-america/	mixed	right
 http://newcenturytimes.com/	newcenturytimes.com	http://mediabiasfactcheck.com/new-century-times/	low	extreme-left
 http://chaser.com.au	chaser.com.au	https://mediabiasfactcheck.com/the-chaser/	low	center
 http://www.financialpost.com/	financialpost.com	http://mediabiasfactcheck.com/financial-post/	high	right-center
@@ -809,7 +806,7 @@ http://vote.us.org/	vote.us.org	http://mediabiasfactcheck.com/vote/	mixed	left
 http://www.newsnow.co.uk/h/	newsnow.co.uk	http://mediabiasfactcheck.com/newsnow-uk/	mixed	center
 http://www.magapill.com	magapill.com	https://mediabiasfactcheck.com/magapill/	low	right
 http://www.themilitant.com/	themilitant.com	http://mediabiasfactcheck.com/the-militant/	high	left
-https://www.indymedia.org/or/index.shtml	indymedia.org-or-index.shtml	http://mediabiasfactcheck.com/independent-media-center/	mixed	left-center
+https://www.indymedia.org/or/index.shtml	indymedia.org	http://mediabiasfactcheck.com/independent-media-center/	mixed	left-center
 http://readersupportednews.org	readersupportednews.org	https://mediabiasfactcheck.com/reader-supported-news-rsn/	mixed	left
 http://www.redstate.com/	redstate.com	http://mediabiasfactcheck.com/red-state/	mixed	right
 http://democratherald.com	democratherald.com	https://mediabiasfactcheck.com/albany-democrat-herald/	high	center
@@ -852,7 +849,6 @@ http://newbostonpost.com	newbostonpost.com	https://mediabiasfactcheck.com/new-bo
 http://thedcgazette.com/	thedcgazette.com	http://mediabiasfactcheck.com/dc-gazette/	low	extreme-right
 http://www.barenakedislam.com/	barenakedislam.com	http://mediabiasfactcheck.com/bare-naked-islam/	low	extreme-right
 http://twitchy.com/	twitchy.com	http://mediabiasfactcheck.com/twitchy/	mixed	right
-https://www.newyorker.com/humor/borowitz-report	newyorker.com-humor-borowitz-report	https://mediabiasfactcheck.com/borowitz-report/	low	center
 http://www.lbc.co.uk	lbc.co.uk	https://mediabiasfactcheck.com/london-broadcasting-company-lbc/	mixed	right-center
 http://www.thenewamerican.com/	thenewamerican.com	http://mediabiasfactcheck.com/the-new-american/	mixed	right
 http://www.rawstory.com/	rawstory.com	http://mediabiasfactcheck.com/raw-story/	mixed	left
@@ -928,9 +924,8 @@ http://www.defenseone.com/	defenseone.com	http://mediabiasfactcheck.com/defense-
 https://electronicintifada.net/	electronicintifada.net	http://mediabiasfactcheck.com/electronic-intifada/	high	left
 http://www.usasupreme.com/	usasupreme.com	http://mediabiasfactcheck.com/usa-supreme/	low	extreme-right
 http://www.thelibertyeagle.com	thelibertyeagle.com	https://mediabiasfactcheck.com/the-liberty-eagle/	low	extreme-right
-https://www.rt.com/news/	rt.com-news	http://mediabiasfactcheck.com/rt-news/	mixed	right-center
+https://www.rt.com/news/	rt.com	http://mediabiasfactcheck.com/rt-news/	mixed	right-center
 http://www.slate.com/	slate.com	http://mediabiasfactcheck.com/slate/	high	left
-http://www.westernjournalism.com/thepoint/	westernjournalism.com-thepoint	http://mediabiasfactcheck.com/tea-party-news-tpnn/	mixed	right
 https://conservativebase.com/	conservativebase.com	http://mediabiasfactcheck.com/conservative-base/	mixed	right
 http://www.desmoinesregister.com/	desmoinesregister.com	http://mediabiasfactcheck.com/the-des-moines-register/	high	right-center
 http://mondoweiss.net/	mondoweiss.net	http://mediabiasfactcheck.com/mondoweiss/	high	left
@@ -967,7 +962,7 @@ http://www.texasstandard.org/	texasstandard.org	https://mediabiasfactcheck.com/t
 https://thenewtropic.com	thenewtropic.com	https://mediabiasfactcheck.com/the-new-tropic/	high	left-center
 http://bigthink.com/	bigthink.com	http://mediabiasfactcheck.com/big-think/	high	center
 http://www.nydailynews.com/	nydailynews.com	http://mediabiasfactcheck.com/new-york-daily-news/	mixed	left-center
-https://scripps.ucsd.edu/news	scripps.ucsd.edu-news	https://mediabiasfactcheck.com/scripps-institution-oceanography/	high	center
+https://scripps.ucsd.edu/news	scripps.ucsd.edu	https://mediabiasfactcheck.com/scripps-institution-oceanography/	high	center
 http://www.lavendermagazine.com/	lavendermagazine.com	http://mediabiasfactcheck.com/lavender-magazine/	high	left
 https://thecitizenpress.com	thecitizenpress.com	https://mediabiasfactcheck.com/the-citizen-press/	mixed	right
 http://www.freewoodpost.com/	freewoodpost.com	http://mediabiasfactcheck.com/free-wood-post/	low	center
@@ -990,7 +985,7 @@ http://dailyheadlines.net/	dailyheadlines.net	http://mediabiasfactcheck.com/dail
 http://redalertpolitics.com/	redalertpolitics.com	http://mediabiasfactcheck.com/red-alert-politics/	mixed	right
 https://www.hopkinsmedicine.org/	hopkinsmedicine.org	https://mediabiasfactcheck.com/johns-hopkins-medicine/	high	center
 http://www.phoenixnewtimes.com/	phoenixnewtimes.com	https://mediabiasfactcheck.com/phoenix-new-times/	high	left-center
-http://citizensunited.org/index.aspx	citizensunited.org-index.aspx	http://mediabiasfactcheck.com/citizens-united/	mixed	right
+http://citizensunited.org/index.aspx	citizensunited.org	http://mediabiasfactcheck.com/citizens-united/	mixed	right
 http://thewashingtonstandard.com/	thewashingtonstandard.com	https://mediabiasfactcheck.com/the-washington-standard/	low	extreme-right
 https://splinternews.com	splinternews.com	https://mediabiasfactcheck.com/splinter/	mixed	left
 http://www.christianitytoday.com/	christianitytoday.com	http://mediabiasfactcheck.com/christianity-today/	high	right-center
@@ -1023,7 +1018,7 @@ http://www.newyorker.com/	newyorker.com	http://mediabiasfactcheck.com/new-yorker
 https://hardnews.network	hardnews.network	https://mediabiasfactcheck.com/hard-news/	low	extreme-right
 http://spectrumreport.com	spectrumreport.com	https://mediabiasfactcheck.com/spectrum-report/	mixed	center
 https://airwars.org/	airwars.org	https://mediabiasfactcheck.com/airwars/	high	center
-http://www.gallup.com/home.aspx	gallup.com-home.aspx	http://mediabiasfactcheck.com/gallup/	high	center
+http://www.gallup.com/home.aspx	gallup.com	http://mediabiasfactcheck.com/gallup/	high	center
 http://www.americanthinker.com/	americanthinker.com	http://mediabiasfactcheck.com/american-thinker/	mixed	right
 http://www.faithwire.com	faithwire.com	https://mediabiasfactcheck.com/faithwire/	mixed	right
 http://www.amny.com/	amny.com	http://mediabiasfactcheck.com/am-new-york/	high	left-center
@@ -1047,7 +1042,7 @@ https://democracyguardian.com	democracyguardian.com	https://mediabiasfactcheck.c
 http://www.miaminewtimes.com/	miaminewtimes.com	http://mediabiasfactcheck.com/miami-new-times-2/	high	left
 https://sentinelksmo.org	sentinelksmo.org	https://mediabiasfactcheck.com/sentinel-ksmo/	mixed	right
 https://www.vice.com/	vice.com	http://mediabiasfactcheck.com/vice-news/	mixed	left-center
-http://news.harvard.edu/gazette/	news.harvard.edu-gazette	http://mediabiasfactcheck.com/harvard-gazette/	high	center
+http://news.harvard.edu/gazette/	news.harvard.edu	http://mediabiasfactcheck.com/harvard-gazette/	high	center
 http://www.worldaffairsjournal.org/	worldaffairsjournal.org	http://mediabiasfactcheck.com/world-affairs-journal/	high	left-center
 http://news.sky.com/	news.sky.com	http://mediabiasfactcheck.com/sky-news/	high	left-center
 http://dailycurrant.com/	dailycurrant.com	http://mediabiasfactcheck.com/the-daily-currant/	low	center
@@ -1063,5 +1058,5 @@ https://news.mongabay.com	news.mongabay.com	https://mediabiasfactcheck.com/monga
 http://fusion.kinja.com/	fusion.kinja.com	http://mediabiasfactcheck.com/fusion/	mixed	left-center
 http://aptnnews.ca	aptnnews.ca	https://mediabiasfactcheck.com/aptn-news/	high	center
 http://www.wsws.org	wsws.org	http://mediabiasfactcheck.com/world-socialist-web-site/	high	left
-https://www.spin.com/death-and-taxes/	spin.com-death-and-taxes	http://mediabiasfactcheck.com/deathandtaxes/	high	left
+https://www.spin.com/death-and-taxes/	spin.com	http://mediabiasfactcheck.com/deathandtaxes/	high	left
 http://www.aina.org	aina.org	https://mediabiasfactcheck.com/assyrian-international-news-agency/	mixed	right
