@@ -9,6 +9,9 @@ __pycache__/
 # Exclude local mlruns artifacts
 mlruns/
 
+# Exclude results from train.py
+results/
+
 # C extensions
 *.so
 
