@@ -50,6 +50,7 @@ int2label = {
 }
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+mlflow.set_tracking_uri(f"file://{PROJECT_DIR}/mlruns")
 
 
 def log_params(kwargs):
