@@ -18,8 +18,9 @@ logger = logging.getLogger(__name__)
 _PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _ALEXA_DATA_PATH = os.path.abspath(os.path.join(_PROJECT_PATH, 'alexa_data'))
 _MODEL_STORAGE = os.path.join(_PROJECT_PATH, 'models')
-_FEATURES_DIR = _PROJECT_PATH + '/data/{corpus_dir}/features'
-_CORPUS_PATH = _PROJECT_PATH + 'data/{corpus_dir}/corpus.tsv'
+_FEATURES_DIR = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'features')
+_CORPUS_PATH = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'corpus.tsv')
+_SPLITS_PATH = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'splits.json')
 _PROCESSED_ALEXA_RESPONSES_URL = 'https://drive.google.com/file/d/1die27CFyizjz1-kQ3ZfTl-ZjL74QCsPr/view?usp=sharing'
 _PROCESSED_ALEXA_RESPONSES_FILE = os.path.join(_ALEXA_DATA_PATH, 'processed_alexa_responses.zip')
 _NODE_FEATURES_FILE = os.path.join(_ALEXA_DATA_PATH, 'node_features.csv')
@@ -213,11 +214,22 @@ def load_level_data(data_path=None, level=0):
 
 
 def load_corpus(data_year):
-    corpus_dir = 'emnlp2018' if data_year == '2018' else 'acl2020'
-    corpus_path = _CORPUS_PATH.format(corpus_dir)
-    logger.info(f'Loading corpus for {data_year} with path {corpus_path}/')
+    corpus_folder = 'emnlp2018' if data_year == '2018' else 'acl2020'
+    corpus_path = _CORPUS_PATH.format(corpus_dir=corpus_folder)
+    logger.info(f'Loading corpus for {data_year} with path {corpus_path}')
 
-    return load_json(corpus_path)
+    with open(corpus_path, 'r') as f:
+        corpus = [row for row in csv.DictReader(f, delimiter='\t')]
+
+    return corpus
+
+
+def load_splits(data_year):
+    splits_dir = 'emnlp2018' if data_year == '2018' else 'acl2020'
+    splits_path = _SPLITS_PATH.format(corpus_dir=splits_dir)
+    logger.info(f'Loading splits for {data_year} with path {splits_path}')
+
+    return load_json(splits_path)
 
 
 def load_node2vec_model(model_name):
