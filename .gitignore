@@ -12,6 +12,9 @@ mlruns/
 # Exclude results from train.py
 results/
 
+# Exclude saved models
+models/
+
 # C extensions
 *.so
 
