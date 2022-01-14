@@ -12,8 +12,11 @@ import pandas as pd
 import requests
 from gensim.models import Word2Vec
 from stellargraph import StellarGraph
+import stellargraph
+from stellargraph.data import BiasedRandomWalk
 
 np.random.seed(16)
+
 logger = logging.getLogger(__name__)
 _PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _ALEXA_DATA_PATH = os.path.abspath(os.path.join(_PROJECT_PATH, 'alexa_data'))
@@ -24,10 +27,6 @@ _SPLITS_PATH = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'splits.json'
 _PROCESSED_ALEXA_RESPONSES_URL = 'https://drive.google.com/file/d/1die27CFyizjz1-kQ3ZfTl-ZjL74QCsPr/view?usp=sharing'
 _PROCESSED_ALEXA_RESPONSES_FILE = os.path.join(_ALEXA_DATA_PATH, 'processed_alexa_responses.zip')
 _NODE_FEATURES_FILE = os.path.join(_ALEXA_DATA_PATH, 'node_features.csv')
-
-
-def check_for_processed_alexa_responses_archive():
-    return os.path.exists(_PROCESSED_ALEXA_RESPONSES_FILE)
 
 
 def download_processed_alexa_responses_archive():
@@ -71,7 +70,7 @@ def download_processed_alexa_responses_archive():
 
 
 def generate_note_features(target_sites, target_features):
-    if not check_for_processed_alexa_responses_archive():
+    if not os.path.exists(_PROCESSED_ALEXA_RESPONSES_FILE):
         raise Exception(f'Please download archive file using {_PROCESSED_ALEXA_RESPONSES_URL} to directory {_ALEXA_DATA_PATH}')
 
     node_feature = defaultdict(dict)
@@ -90,43 +89,43 @@ def generate_note_features(target_sites, target_features):
 
 def generate_node_features_file():
     """Target features:
-    alexa_rank -> site_rank
-    site_metrics -> daily_pageviews_per_visitors
-    site_metrics -> daily_time_on_sites
-    site_metrics -> total_sites_linking_ins
-    site_metrics -> bounce_rate
+        alexa_rank -> site_rank
+        site_metrics -> daily_pageviews_per_visitors
+        site_metrics -> daily_time_on_sites
+        site_metrics -> total_sites_linking_ins
+        site_metrics -> bounce_rate
 
-    Raw features:
-    >>> node_features['cnn.com']
-    {
-        'alexa_rank': {
-            'site_rank': '# 79'
-        },
-        'site_metrics': {
-            'daily_pageviews_per_visitor': '2.26',
-            'daily_time_on_site': '4:08',
-            'total_sites_linking_in': '153,450',
-            'bounce_rate': '52.9%'
+        Raw features:
+        >>> node_features['cnn.com']
+        {
+            'alexa_rank': {
+                'site_rank': '# 79'
+            },
+            'site_metrics': {
+                'daily_pageviews_per_visitor': '2.26',
+                'daily_time_on_site': '4:08',
+                'total_sites_linking_in': '153,450',
+                'bounce_rate': '52.9%'
+            }
         }
-    }
 
-    Processed features:
-    {
-        'alexa_rank': {'site_rank': 79},
-        'site_metrics': {
-            'daily_pageviews_per_visitor': 2.26,
-            'daily_time_on_site': 248,  # daily_time_on_site in seconds
-            'total_sites_linking_in': 153450,
-            'bounce_rate': 0.529        # bounce_rate in decimal
+        Processed features:
+        {
+            'alexa_rank': {'site_rank': 79},
+            'site_metrics': {
+                'daily_pageviews_per_visitor': 2.26,
+                'daily_time_on_site': 248,  # daily_time_on_site in seconds
+                'total_sites_linking_in': 153450,
+                'bounce_rate': 0.529        # bounce_rate in decimal
+            }
         }
-    }
     """
     target_features = {
         'alexa_rank': ['site_rank',],
         'site_metrics': ['daily_pageviews_per_visitor', 'daily_time_on_site', 'total_sites_linking_in', 'bounce_rate']
     }
 
-    if not check_for_processed_alexa_responses_archive():
+    if not os.path.exists(_PROCESSED_ALEXA_RESPONSES_FILE):
         raise Exception(f'Please download archive file using {_PROCESSED_ALEXA_RESPONSES_URL} to directory {_ALEXA_DATA_PATH}')
 
     with zipfile.ZipFile(_PROCESSED_ALEXA_RESPONSES_FILE, 'r') as zip_fd:
@@ -203,8 +202,7 @@ def dump_json(path, data):
 
 
 def load_level_data(data_path=None, level=0):
-    with open(data_path, 'r') as f:
-        data = json.load(f)
+    data = load_json(data_path)
 
     output = {record['sites']: record for record in data if record['levels'] <= level}
     logger.info((f"Loaded {len(output)} nodes with records level <= {level} and child size:"
@@ -213,7 +211,7 @@ def load_level_data(data_path=None, level=0):
     return output
 
 
-def load_corpus(data_year):
+def load_corpus(data_year='2020'):
     corpus_folder = 'emnlp2018' if data_year == '2018' else 'acl2020'
     corpus_path = _CORPUS_PATH.format(corpus_dir=corpus_folder)
     logger.info(f'Loading corpus for {data_year} with path {corpus_path}')
@@ -224,7 +222,7 @@ def load_corpus(data_year):
     return corpus
 
 
-def load_splits(data_year):
+def load_splits(data_year='2020'):
     splits_dir = 'emnlp2018' if data_year == '2018' else 'acl2020'
     splits_path = _SPLITS_PATH.format(corpus_dir=splits_dir)
     logger.info(f'Loading splits for {data_year} with path {splits_path}')
@@ -234,6 +232,17 @@ def load_splits(data_year):
 
 def load_node2vec_model(model_name):
     return Word2Vec.load(os.path.join(_MODEL_STORAGE, model_name))
+
+
+def save_node2vec_model(model, model_name):
+    os.makedirs(_MODEL_STORAGE, exist_ok=True)
+
+    if model_name in os.listdir(_MODEL_STORAGE):
+        raise ValueError(f'Model {model_name} already exists in {_MODEL_STORAGE}!')
+
+    model.save(os.path.join(_MODEL_STORAGE, model_name))
+
+    print(f"Successful save of model: {model_name}!")
 
 
 def create_nodes(lvl_data, edge_type=None):
@@ -269,6 +278,51 @@ def create_graph(lvl_data, root):
             edges.append((k, overlap_site['url']))
 
     return edges
+
+
+def create_node2vec_model(G, is_weighted, file_name=None, prefix=None, dimensions=[]):
+    """Creates a node2vec model and saves it.
+
+    Args:
+        G: Stellar graph instance.
+        dimensions: List of integer value that tells in which dimension should the embeddings be
+        is_weighted: Boolean value that indicates whenever the graph is weighted or not
+        file_name: Name of the file where the model will be saved. Please use the file extention '.model'
+
+    Returns:
+        A dictionary of the form {'model_name_1': model_1, 'model_name_2': model_2, ...}
+    """
+    # TODO Add more checks for the input parameters
+    if not file_name:
+        weight = 'unweighted' if not is_weighted else 'weighted'
+        file_names = [f"{prefix}_{weight}_{dimension}D.model" for dimension in dimensions]
+    else:
+        file_names = [file_name]
+
+    rw = BiasedRandomWalk(G)
+
+    print("Start creating random walks")
+    walks = rw.run(
+        nodes=list(G.nodes()),  # root nodes
+        length=100,             # maximum length of a random walk
+        n=10,                   # number of random walks per root node
+        p=0.5,                  # Defines (unnormalized) probability, 1/p, of returning to source node
+        q=2.0,                  # Defines (unnormalized) probability, 1/q, for moving away from source node
+        weighted=is_weighted,   # for weighted random walks
+        seed=42,                # random seed fixed for reproducibility
+    )
+    print("Number of random walks: {}".format(len(walks)))
+
+    str_walks = [[str(n) for n in walk] for walk in walks]
+
+    models = {}
+    for d, model_name in zip(dimensions, file_names):
+        print(d, model_name)
+        model = Word2Vec(str_walks, vector_size=d, window=5, min_count=0, sg=1, workers=2, seed=42)
+        save_node2vec_model(model, model_name)
+        models[model_name] = model
+
+    return models
 
 
 def draw_graph(edges=None, graph=None):
