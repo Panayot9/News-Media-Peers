@@ -385,6 +385,7 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
     # display the experiment summary in a tabular format
     summary = PrettyTable()
     summary.add_column("task", [task])
+    summary.add_column("dataset", [dataset])
     summary.add_column("classification_mode", ["single classifier"])
     summary.add_column("type_training", [type_training])
     summary.add_column("normalize_features", [normalize_features])
@@ -452,6 +453,12 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
     summary.add_column("MAE", [mae])
 
     print(summary)
+
+
+def run_experiments(experiments):
+    """Runs the experiments specified in the experiments list."""
+    for experiment in experiments:
+        run_experiment(**experiment)
 
 
 if __name__ == "__main__":
