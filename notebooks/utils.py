@@ -12,7 +12,6 @@ import pandas as pd
 import requests
 from gensim.models import Word2Vec
 from stellargraph import StellarGraph
-import stellargraph
 from stellargraph.data import BiasedRandomWalk
 
 np.random.seed(16)
@@ -20,6 +19,7 @@ np.random.seed(16)
 logger = logging.getLogger(__name__)
 _PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _ALEXA_DATA_PATH = os.path.abspath(os.path.join(_PROJECT_PATH, 'alexa_data'))
+_ARTICLES_2020 = os.path.join(_PROJECT_PATH, 'data', 'acl2020', 'articles.zip')
 _MODEL_STORAGE = os.path.join(_PROJECT_PATH, 'models')
 _FEATURES_DIR = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'features')
 _CORPUS_PATH = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'corpus.tsv')
