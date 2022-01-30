@@ -1,0 +1,7 @@
+Compilation:
+-----------=
+gcc -o bp_hp bp_hp.c -lpthread -mcmodel=medium
+
+Run: (Please check example and example2)
+----
+./run_bp.sh <edges_file> <ground_truth_file> <edge_potential_file>

@@ -1,0 +1,5 @@
+0 A U
+1 C U
+2 B B
+3 E U
+4 D G

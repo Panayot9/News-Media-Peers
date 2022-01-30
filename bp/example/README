@@ -1,0 +1,65 @@
+Create a new folder called example:
+copy edges.txt, gt.txt and edge_potential.txt
+
+edges.txt: (A simple graph with 5 nodes and 4 edges)
+A B
+A C
+A D
+A E
+
+gt.txt: (G for good and B for bad)
+B B
+D G
+
+edge_potential.txt (reflects how strong our homophily relationships are)
+s1 s1 0.8
+s1 s2 0.2
+s2 s1 0.2
+s2 s2 0.8
+
+
+Execute the following:
+../run_bp.sh edges.txt gt.txt edge_potential.txt
+
+Understanding the output:
+-------------------------
+The above script prodcues 4 files prefixed with "bp_"
+
+bp_graph_node_index.txt:
+0 A U
+1 C U
+2 B B
+3 E U
+4 D G
+
+This file contains the index assigned to each graph node. Further, it contains the status of all nodes, G, B, U.
+
+bp_graph_edges.txt:
+0 2
+0 1
+0 4
+0 3
+
+This is the indexed edge file. i.e. it simply is the same edge file with numerical indexes now.
+cat bp_graph_initial_belief.txt 
+0 s1 0.5
+0 s2 0.5
+1 s1 0.5
+1 s2 0.5
+2 s1 0.75
+2 s2 0.25
+3 s1 0.5
+3 s2 0.5
+4 s1 0.25
+4 s2 0.75
+
+This file contains the initial belief (prior probability) of each node. Each node can be in either s1 (bad) or s2 (good). Notice that unknown nodes have the belief of 0.5/0.5 and ground truth nodes have 0.75/0.25. At present, the ground truth node beliefs are hard-coded in the bp algorithm. We may make it an input parameter in the future.
+
+bp_graph_results.txt:
+0: [0.50000000000000000000, 0.50000000000000000000]
+1: [0.50000000000000000000, 0.50000000000000000000]
+2: [0.67582417582417582413, 0.32417582417582417581]
+3: [0.50000000000000000000, 0.50000000000000000000]
+4: [0.32417582417582417581, 0.67582417582417582413]
+
+This is the final result file containing the final beliefs of each node. The first column is the node index, the second is the probability of node being bad and the third is the probability of the node being good.
