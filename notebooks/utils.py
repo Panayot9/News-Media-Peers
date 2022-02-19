@@ -245,7 +245,7 @@ def save_node2vec_model(model, model_name):
     print(f"Successful save of model: {model_name}!")
 
 
-def create_nodes(lvl_data, edge_type=None):
+def create_overlap_nodes(lvl_data, edge_type=None):
     nodes = []
     for k in list(lvl_data.keys()):
         if not lvl_data[k]['overlap_sites']:
@@ -395,9 +395,9 @@ def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, ad
     audience_overlap_sites = load_level_data(os.path.join(_ALEXA_DATA_PATH, audience_overlap_scrapping_file), level=level)
 
     if add_edge_type:
-        audience_overlap_sites_NODES = create_nodes(audience_overlap_sites, edge_type='similar_by_audience_overlap_to')
+        audience_overlap_sites_NODES = create_overlap_nodes(audience_overlap_sites, edge_type='similar_by_audience_overlap_to')
     else:
-        audience_overlap_sites_NODES = create_nodes(audience_overlap_sites)
+        audience_overlap_sites_NODES = create_overlap_nodes(audience_overlap_sites)
 
     logger.info('referral_sites node size:', len(referral_sites_NODES),
                 'audience_overlap node size:', len(audience_overlap_sites_NODES))
