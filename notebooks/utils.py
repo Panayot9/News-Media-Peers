@@ -201,7 +201,16 @@ def dump_json(path, data):
         json.dump(data, f)
 
 
-def load_level_data(data_path=None, level=0):
+def load_level_data(data_path: str = None, level: int = 0) -> dict:
+    """Loads audience_overlap data from file.
+
+    Args:
+        data_path (str): Path to the data file.
+        level (int): Level of the data.
+
+    Returns:
+        dict: Audience overlap data.
+    """
     data = load_json(data_path)
 
     output = {record['sites']: record for record in data if record['levels'] <= level}
@@ -245,27 +254,27 @@ def save_node2vec_model(model, model_name):
     print(f"Successful save of model: {model_name}!")
 
 
-def create_overlap_nodes(lvl_data, edge_type=None):
+def create_audience_overlap_nodes(lvl_data, edge_type=None):
     nodes = []
-    for k in list(lvl_data.keys()):
-        if not lvl_data[k]['overlap_sites']:
-            el = (k, k, edge_type) if edge_type else (k, k)
+    for site in lvl_data.keys():
+        if not lvl_data[site]['overlap_sites']:  # if empty
+            el = (site, site, edge_type) if edge_type else (site, site)
             nodes.append(el)
         else:
-            for urls in lvl_data[k]['overlap_sites']:
-                el = (k, urls['url'], edge_type) if edge_type else (k, urls['url'])
+            for audience_overlap_site in lvl_data[site]['overlap_sites']:
+                el = (site, audience_overlap_site['url'], edge_type) if edge_type else (site, audience_overlap_site['url'])
                 nodes.append(el)
     return nodes
 
 
-def create_weighted_nodes(lvl_data):
+def create_audience_overlap_weighted_nodes(lvl_data, unconnected_node_weight=0.5, connected_node_weight=1.0):
     nodes = []
-    for k in list(lvl_data.keys()):
-        if not lvl_data[k]['overlap_sites']:
-            nodes.append((k, k, 0.5))
+    for site in lvl_data.keys():
+        if not lvl_data[site]['overlap_sites']:
+            nodes.append((site, site, unconnected_node_weight))
         else:
-            for urls in lvl_data[k]['overlap_sites']:
-                nodes.append((k, urls['url'], urls.get('overlap_score', 1)))
+            for audience_overlap_site in lvl_data[site]['overlap_sites']:
+                nodes.append((site, audience_overlap_site['url'], audience_overlap_site.get('overlap_score', connected_node_weight)))
 
     return nodes
 
@@ -395,9 +404,9 @@ def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, ad
     audience_overlap_sites = load_level_data(os.path.join(_ALEXA_DATA_PATH, audience_overlap_scrapping_file), level=level)
 
     if add_edge_type:
-        audience_overlap_sites_NODES = create_overlap_nodes(audience_overlap_sites, edge_type='similar_by_audience_overlap_to')
+        audience_overlap_sites_NODES = create_audience_overlap_nodes(audience_overlap_sites, edge_type='similar_by_audience_overlap_to')
     else:
-        audience_overlap_sites_NODES = create_overlap_nodes(audience_overlap_sites)
+        audience_overlap_sites_NODES = create_audience_overlap_nodes(audience_overlap_sites)
 
     logger.info('referral_sites node size:', len(referral_sites_NODES),
                 'audience_overlap node size:', len(audience_overlap_sites_NODES))
