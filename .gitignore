@@ -15,6 +15,10 @@ results/
 # Exclude saved models
 models/
 
+# Vscode files
+.vscode/
+workspace.code-workspace
+
 # C extensions
 *.so
 
