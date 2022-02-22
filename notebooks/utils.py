@@ -279,6 +279,50 @@ def create_audience_overlap_weighted_nodes(lvl_data, unconnected_node_weight=0.5
     return nodes
 
 
+def create_referral_sites_nodes(data, edge_type=None):
+    nodes = []
+    for base_url, referral_sites in data.items():
+        if not referral_sites:
+            el = (base_url, base_url, edge_type) if edge_type else (base_url, base_url)
+            nodes.append(el)
+        else:
+            for referral_site, _ in referral_sites:
+                if referral_site != base_url:
+                    el = (base_url, referral_site, edge_type) if edge_type else (base_url, referral_site)
+                    nodes.append(el)
+
+    logger.info('Node length:', len(nodes))
+    logger.info('Distinct node length:', len(set(nodes)))
+
+    return set(nodes)
+
+
+def create_referral_sites_weighted_nodes(data, unconnected_node_weight=0.5, connected_node_weight=1.0):
+    nodes = []
+    for base_url, referral_sites in data.items():
+        if not referral_sites:
+            nodes.append((base_url, base_url, unconnected_node_weight))
+        else:
+            for referral_site, referral_index in referral_sites:
+                if referral_index == '--':
+                    referral_index = None
+                else:
+                    if ' k' in referral_index:
+                        referral_index = float(referral_index.replace(' k', '')) * 1_000
+                    elif ' m' in referral_index:
+                        referral_index = float(referral_index.replace(' m', '')) * 1_000_000
+                    else:
+                        referral_index = float(referral_index)
+
+                if referral_site != base_url:
+                    nodes.append((base_url, referral_site, connected_node_weight) if referral_index is None else (base_url, referral_site, referral_index))
+
+    logger.info('Node length:', len(nodes))
+    logger.info('Distinct node length:', len(set(nodes)))
+
+    return set(nodes)
+
+
 def create_graph(lvl_data, root):
     edges = []
     for k in lvl_data[root].keys():
@@ -341,23 +385,6 @@ def draw_graph(edges=None, graph=None):
         nx.draw_networkx(graph.to_networkx())
     else:
         nx.draw_networkx(StellarGraph(edges=edges).to_networkx())
-
-
-def get_referral_sites_edges(data):
-    nodes = []
-
-    for base_url, referral_sites in data.items():
-        if not referral_sites:
-            nodes.append((base_url, base_url))
-        else:
-            for referral_site, _ in referral_sites:
-                if referral_site != base_url:
-                    nodes.append((base_url, referral_site))
-
-    logger.info('Node length:', len(nodes))
-    logger.info('Distinct node length:', len(set(nodes)))
-
-    return set(nodes)
 
 
 def combined_nodes_referral_sites_audience_overlap(data_year='2020', level=1, add_edge_type=False):
