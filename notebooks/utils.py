@@ -306,13 +306,12 @@ def create_referral_sites_weighted_nodes(data, unconnected_node_weight=0.5, conn
             for referral_site, referral_index in referral_sites:
                 if referral_index == '--':
                     referral_index = None
+                elif ' k' in referral_index:
+                    referral_index = float(referral_index.replace(' k', '')) * 1_000
+                elif ' m' in referral_index:
+                    referral_index = float(referral_index.replace(' m', '')) * 1_000_000
                 else:
-                    if ' k' in referral_index:
-                        referral_index = float(referral_index.replace(' k', '')) * 1_000
-                    elif ' m' in referral_index:
-                        referral_index = float(referral_index.replace(' m', '')) * 1_000_000
-                    else:
-                        referral_index = float(referral_index)
+                    referral_index = float(referral_index)
 
                 if referral_site != base_url:
                     nodes.append((base_url, referral_site, connected_node_weight) if referral_index is None else (base_url, referral_site, referral_index))
