@@ -19,6 +19,20 @@ np.random.seed(16)
 logger = logging.getLogger(__name__)
 _PROJECT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _ALEXA_DATA_PATH = os.path.abspath(os.path.join(_PROJECT_PATH, 'alexa_data'))
+_REFERRAL_SITES_DATA_PATH = {
+    2020: {
+        0: 'corpus_2020_referral_sites.json',
+        1: 'corpus_2020_referral_sites_level_1.json',
+        2: 'corpus_2020_referral_sites_level_2.json',
+        3: 'corpus_2020_referral_sites_level_3.json',
+    },
+    2018: {
+        0: 'modified_corpus_2018_referral_sites.json',
+        1: 'modified_corpus_2018_referral_sites_level_1.json',
+        2: 'modified_corpus_2018_referral_sites_level_2.json',
+        3: 'modified_corpus_2018_referral_sites_level_3.json',
+    }
+}
 _ARTICLES_2020 = os.path.join(_PROJECT_PATH, 'data', 'acl2020', 'articles.zip')
 _MODEL_STORAGE = os.path.join(_PROJECT_PATH, 'models')
 _FEATURES_DIR = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'features')
@@ -279,6 +293,23 @@ def create_audience_overlap_weighted_nodes(lvl_data, unconnected_node_weight=0.5
     return nodes
 
 
+def get_referral_sites_edges(data_year=2020, level=0):
+    """
+    Args:
+        data_year (str): Year of the data.
+        level (int): Level of the data.
+
+    Returns:
+        list: List of tuples of referral sites.
+    """
+    edges = []
+    for level in range(level + 1):
+        logger.info(f'Processing level {level}')
+        data = load_json(os.path.join(_ALEXA_DATA_PATH, _REFERRAL_SITES_DATA_PATH[data_year][level]))
+        edges.extend(create_referral_sites_nodes(data))
+    return edges
+
+
 def create_referral_sites_nodes(data, edge_type=None):
     nodes = []
     for base_url, referral_sites in data.items():
@@ -291,10 +322,10 @@ def create_referral_sites_nodes(data, edge_type=None):
                     el = (base_url, referral_site, edge_type) if edge_type else (base_url, referral_site)
                     nodes.append(el)
 
-    logger.info('Node length:', len(nodes))
-    logger.info('Distinct node length:', len(set(nodes)))
+    logger.info(f'Node length: {len(nodes)}')
+    logger.info(f'Distinct node length: {len(set(nodes))}')
 
-    return set(nodes)
+    return list(set(nodes))
 
 
 def create_referral_sites_weighted_nodes(data, unconnected_node_weight=0.5, connected_node_weight=1.0):
@@ -316,10 +347,10 @@ def create_referral_sites_weighted_nodes(data, unconnected_node_weight=0.5, conn
                 if referral_site != base_url:
                     nodes.append((base_url, referral_site, connected_node_weight) if referral_index is None else (base_url, referral_site, referral_index))
 
-    logger.info('Node length:', len(nodes))
-    logger.info('Distinct node length:', len(set(nodes)))
+    logger.info(f'Node length: {len(nodes)}')
+    logger.info(f'Distinct node length: {len(set(nodes))}')
 
-    return set(nodes)
+    return list(set(nodes))
 
 
 def create_graph(lvl_data, root):
