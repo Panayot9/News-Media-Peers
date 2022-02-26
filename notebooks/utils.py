@@ -33,6 +33,10 @@ _REFERRAL_SITES_DATA_PATH = {
         3: 'modified_corpus_2018_referral_sites_level_3.json',
     }
 }
+_AUDIENCE_OVERLAP_DATA_PATH = {
+    2020: 'corpus_2020_audience_overlap_sites_scrapping_result.json',
+    2018: 'corpus_2018_audience_overlap_sites_scrapping_result.json'
+}
 _ARTICLES_2020 = os.path.join(_PROJECT_PATH, 'data', 'acl2020', 'articles.zip')
 _MODEL_STORAGE = os.path.join(_PROJECT_PATH, 'models')
 _FEATURES_DIR = os.path.join(_PROJECT_PATH, 'data', '{corpus_dir}', 'features')
@@ -266,6 +270,21 @@ def save_node2vec_model(model, model_name):
     model.save(os.path.join(_MODEL_STORAGE, model_name))
 
     print(f"Successful save of model: {model_name}!")
+
+
+def get_audience_overlap_edges(data_year=2020, level=0):
+    """Get audience overlap edges.
+
+    Args:
+        data_year (str): Year of the data.
+        level (int): Level of the data.
+
+    Returns:
+        list: List of edges.
+    """
+    data_path = _AUDIENCE_OVERLAP_DATA_PATH[data_year]
+    data = load_level_data(data_path, level)
+    return create_audience_overlap_nodes(data)
 
 
 def create_audience_overlap_nodes(lvl_data, edge_type=None):
