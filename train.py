@@ -142,13 +142,13 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
 
         # concatenate the different features/labels for the training sources
         X["train"] = np.asarray([list(itertools.chain(*[v[url] for _, v in features.items()]))
-                                 for url in urls["train"]]).astype("float")
-        y["train"] = np.array([labels[url] for url in urls["train"]], dtype=np.int)
+                                 for url in urls["train"] if url not in kwargs['skip_sites']]).astype("float")
+        y["train"] = np.array([labels[url] for url in urls["train"] if url not in kwargs['skip_sites']], dtype=np.int)
 
         # concatenate the different features/labels for the testing sources
         X["test"] = np.asarray([list(itertools.chain(*[v[url] for _, v in features.items()]))
-                                for url in urls["test"]]).astype("float")
-        y["test"] = np.array([labels[url] for url in urls["test"]], dtype=np.int)
+                                for url in urls["test"] if url not in kwargs['skip_sites']]).astype("float")
+        y["test"] = np.array([labels[url] for url in urls["test"] if url not in kwargs['skip_sites']], dtype=np.int)
 
         if kwargs['normalize_features']:
             # normalize the features values
@@ -190,11 +190,12 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
     actual = np.array([int2label[kwargs['task']][int(l)] for l in actual])
 
     # create a dictionary: the keys are the media, and the values are their actual and predicted labels
-    predictions = {all_urls[i]: (actual[i], predicted[i]) for i in range(len(all_urls))}
+    # predictions = {all_urls[i]: (actual[i], predicted[i]) for i in range(len(all_urls))}
 
+    print('all_urls', len(all_urls), 'actual', len(actual), 'predicted', len(predicted))
     # create a dataframe that contains the list of m actual labels, the predictions with probabilities.  then store it in the output directory
     df_out = pd.DataFrame({
-        "source_url": all_urls,
+        "source_url": [site for site in all_urls if site not in kwargs['skip_sites']],
         "actual": actual,
         "predicted": predicted,
         int2label[kwargs['task']][0]: probs[:, 0],
@@ -210,6 +211,9 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
 def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict[str, str], **kwargs):
     # read the dataset
     df = pd.read_csv(corpus_path, sep="\t")
+
+    if kwargs['skip_sites']:
+        df = df[~df["source_url_normalized"].isin(kwargs['skip_sites'])]
 
     # create a dictionary: the keys are the media and the values are their corresponding labels (transformed to int)
     df['labels'] = df[kwargs['task']].apply(lambda x: label2int[kwargs['task']][x])
@@ -227,7 +231,8 @@ def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict
         log_params(kwargs)
         f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels, num_labels=kwargs['num_labels'],
                                                   task=kwargs['task'], out_dir=kwargs['out_dir'],
-                                                  normalize_features=kwargs['normalize_features'])
+                                                  normalize_features=kwargs['normalize_features'],
+                                                  skip_sites=kwargs['skip_sites'])
 
     # write the experiment results in a tabular format
     res = PrettyTable()
@@ -361,8 +366,9 @@ def parse_arguments():
 
 
 def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl2020", num_labels: int = 3,
-                   type_training: str = "combine", clear_cache: bool = True, normalize_features: bool = False):
-    """Ren classifier traning usign input arguments.
+                   type_training: str = "combine", clear_cache: bool = True, normalize_features: bool = False,
+                   skip_sites = None):
+    """Run classifier traning usign input arguments.
 
     Args:
         features (str): the features that will be used in the current experiment (comma-separated)
@@ -411,7 +417,8 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
         f1, accuracy, flip_err, mae = train_combined_model(corpus_path, splits_file, feature_files,
                                                            task=task, dataset=dataset, type_training=type_training,
                                                            normalize_features=normalize_features, features=features,
-                                                           num_labels=num_labels, out_dir=out_dir, summary=summary)
+                                                           num_labels=num_labels, out_dir=out_dir, summary=summary,
+                                                           skip_sites=skip_sites)
 
     elif type_training == "ensemble":
         now = datetime.now()
