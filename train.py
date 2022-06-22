@@ -49,6 +49,47 @@ int2label = {
     "bias": {0: "left", 1: "center", 2: "right"},
 }
 
+
+corpus_2018_corpus_correction = {
+    'conservativeoutfitters.com-blogs-news': 'conservativeoutfitters.com',
+    'who.int-en': 'who.int',
+    'themaven.net-beingliberal': 'themaven.net',
+    'al-monitor.com-pulse-home.html': 'al-monitor.com',
+    'pri.org-programs-globalpost': 'pri.org',
+    'mlive.com-grand-rapids-#-0': 'mlive.com',
+    'pacificresearch.org-home': 'pacificresearch.org',
+    'telesurtv.net-english': 'telesurtv.net',
+    'elpais.com-elpais-inenglish.html': 'elpais.com',
+    'inquisitr.com-news': 'inquisitr.com',
+    'cato.org-regulation': 'cato.org',
+    'jpost.com-Jerusalem-Report': 'jpost.com',
+    'newcenturytimes.com': 'newcenturytimes.com',
+    'oregonlive.com-#-0': 'oregonlive.com',
+    'rfa.org-english': 'rfa.org',
+    'people.com-politics': 'people.com',
+    'russia-insider.com-en': 'russia-insider.com',
+    'nola.com-#-0': 'nola.com',
+    'host.madison.com-wsj': 'host.madison.com',
+    'conservapedia.com-Main_Page': 'conservapedia.com',
+    'futureinamerica.com-news': 'futureinamerica.com',
+    'indymedia.org-or-index.shtml': 'indymedia.org',
+    'newyorker.com-humor-borowitz-report': 'newyorker.com',
+    'rt.com-news': 'rt.com',
+    'westernjournalism.com-thepoint': 'westernjournalism.com',
+    'scripps.ucsd.edu-news': 'scripps.ucsd.edu',
+    'citizensunited.org-index.aspx': 'citizensunited.org',
+    'gallup.com-home.aspx': 'gallup.com',
+    'news.harvard.edu-gazette': 'news.harvard.edu',
+    'spin.com-death-and-taxes': 'spin.com',
+    'itv.com-news': 'itv.com',
+    'theguardian.com-observer': 'theguardian.com',
+    'concernedwomen.org-blog': 'concernedwomen.org',
+    'npr.org-sections-news': 'npr.org',
+    'yahoo.com-news-?ref=gs': 'yahoo.com',
+    'zcomm.org-zmag': 'zcomm.org',
+    'therealnews.com-t2': 'therealnews.com'
+}
+
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 mlflow.set_tracking_uri(f"file://{PROJECT_DIR}/mlruns")
 
@@ -224,7 +265,10 @@ def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict
     # create the features dictionary: each key corresponds to a feature type, and its value is the pre-computed features dictionary
     loaded_features = {}
     for feature, feature_file in feature_files.items():
-        loaded_features[feature] = load_json(feature_file)
+        if 'emnlp' in corpus_path:
+            loaded_features[feature] = {corpus_2018_corpus_correction.get(k, k) : v for k, v in load_json(feature_file).items()}
+        else:
+            loaded_features[feature] = load_json(feature_file)
 
     with mlflow.start_run():
         log_params(kwargs)
@@ -281,7 +325,10 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
 
     loaded_features = {}
     for feature, feature_file in feature_files.items():
-        loaded_features[feature] = load_prediction_file(feature_file, kwargs)
+        if 'emnlp' in corpus_path:
+            loaded_features[feature] = {corpus_2018_corpus_correction.get(k, k) : v for k, v in load_prediction_file(feature_file, kwargs).items()}
+        else:
+            loaded_features[feature] = load_prediction_file(feature_file, kwargs)
 
     with mlflow.start_run():
         log_params(kwargs)
