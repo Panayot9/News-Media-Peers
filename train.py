@@ -447,7 +447,6 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
         os.makedirs(out_dir, exist_ok=True)
 
         result_dir = os.path.join(PROJECT_DIR, "data", dataset, "results")
-        features = [f'{task}_{feature}' for feature in features]
 
         features_files = {}
         for feature in features:
