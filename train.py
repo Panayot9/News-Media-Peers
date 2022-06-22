@@ -124,31 +124,31 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
     i = 0
     num_folds = len(splits)
 
-    logger.info("Start training...")
+    logger.info(f"Start training... {kwargs.get('skip_sites', [])}")
 
     for f in range(num_folds):
         logger.info(f"Fold: {f}")
 
         # get the training and testing media for the current fold
         urls = {
-            "train": splits[str(f)]["train"],
-            "test": splits[str(f)]["test"],
+            "train": [url for url in splits[str(f)]["train"] if url not in kwargs.get('skip_sites', [])],
+            "test": [url for url in splits[str(f)]["test"] if url not in kwargs.get('skip_sites', [])],
         }
 
-        all_urls.extend(splits[str(f)]["test"])
+        all_urls.extend([site for site in splits[str(f)]["test"] if site not in kwargs.get('skip_sites', [])])
 
         # initialize the features and labels matrices
         X, y = {}, {}
 
         # concatenate the different features/labels for the training sources
         X["train"] = np.asarray([list(itertools.chain(*[v[url] for _, v in features.items()]))
-                                 for url in urls["train"] if url not in kwargs['skip_sites']]).astype("float")
-        y["train"] = np.array([labels[url] for url in urls["train"] if url not in kwargs['skip_sites']], dtype=np.int)
+                                 for url in urls["train"]]).astype("float")
+        y["train"] = np.array([labels[url] for url in urls["train"]], dtype=np.int)
 
         # concatenate the different features/labels for the testing sources
         X["test"] = np.asarray([list(itertools.chain(*[v[url] for _, v in features.items()]))
-                                for url in urls["test"] if url not in kwargs['skip_sites']]).astype("float")
-        y["test"] = np.array([labels[url] for url in urls["test"] if url not in kwargs['skip_sites']], dtype=np.int)
+                                for url in urls["test"]]).astype("float")
+        y["test"] = np.array([labels[url] for url in urls["test"]], dtype=np.int)
 
         if kwargs['normalize_features']:
             # normalize the features values
@@ -192,10 +192,9 @@ def train_model(splits: Dict[str, Dict[str, List[str]]],
     # create a dictionary: the keys are the media, and the values are their actual and predicted labels
     # predictions = {all_urls[i]: (actual[i], predicted[i]) for i in range(len(all_urls))}
 
-    print('all_urls', len(all_urls), 'actual', len(actual), 'predicted', len(predicted))
     # create a dataframe that contains the list of m actual labels, the predictions with probabilities.  then store it in the output directory
     df_out = pd.DataFrame({
-        "source_url": [site for site in all_urls if site not in kwargs['skip_sites']],
+        "source_url": all_urls,
         "actual": actual,
         "predicted": predicted,
         int2label[kwargs['task']][0]: probs[:, 0],
@@ -212,7 +211,7 @@ def train_combined_model(corpus_path: str, splits_file: str, feature_files: Dict
     # read the dataset
     df = pd.read_csv(corpus_path, sep="\t")
 
-    if kwargs['skip_sites']:
+    if kwargs.get('skip_sites'):
         df = df[~df["source_url_normalized"].isin(kwargs['skip_sites'])]
 
     # create a dictionary: the keys are the media and the values are their corresponding labels (transformed to int)
@@ -270,6 +269,9 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
     # read the dataset
     df = pd.read_csv(corpus_path, sep="\t")
 
+    if kwargs.get('skip_sites'):
+        df = df[~df["source_url_normalized"].isin(kwargs['skip_sites'])]
+
     # create a dictionary: the keys are the media and the values are their corresponding labels (transformed to int)
     df['labels'] = df[kwargs['task']].apply(lambda x: label2int[kwargs['task']][x])
     labels = dict(df[['source_url_normalized', 'labels']].values.tolist())
@@ -285,7 +287,8 @@ def train_ensemble_model(corpus_path: str, splits_file: str, feature_files: Dict
         log_params(kwargs)
         f1, accuracy, flip_err, mae = train_model(splits, loaded_features, labels, num_labels=kwargs['num_labels'],
                                                   task=kwargs['task'], out_dir=kwargs['out_dir'],
-                                                  normalize_features=kwargs['normalize_features'])
+                                                  normalize_features=kwargs['normalize_features'],
+                                                  skip_sites=kwargs['skip_sites'])
 
     # write the experiment results in a tabular format
     res = PrettyTable()
@@ -362,6 +365,13 @@ def parse_arguments():
         help="Indicates what type of model training to do. Possible values are: 'combine', 'ensemble'",
     )
 
+    parser.add_argument(
+        "-s",
+        "--skip_sites",
+        type=str,
+        default="",
+        help="the sites to skip when training - isolated sites",
+    )
     return vars(parser.parse_args())  # cast to dict
 
 
@@ -384,6 +394,9 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
     """
     if not features:
         raise ValueError("No Features are specified")
+
+    if skip_sites:
+        skip_sites = sorted([skip_site.strip() for skip_site in skip_sites.split(",")])
 
     # create the list of features sorted alphabetically
     features = sorted([feature.strip() for feature in features.split(",")])
@@ -450,7 +463,8 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
         f1, accuracy, flip_err, mae = train_ensemble_model(corpus_path, splits_file, features_files,
                                                            task=task, dataset=dataset, type_training=type_training,
                                                            normalize_features=normalize_features, features=features,
-                                                           num_labels=num_labels, out_dir=out_dir, summary=summary)
+                                                           num_labels=num_labels, out_dir=out_dir, summary=summary,
+                                                           skip_sites=skip_sites)
     else:
         raise ValueError(f"Unsupported type_training ('{type_training}'). Supported ones are 'combine' or 'ensemble'!")
 
