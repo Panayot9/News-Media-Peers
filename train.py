@@ -101,7 +101,7 @@ def log_params(kwargs):
         'task': kwargs['task'],
         'type_training': kwargs['type_training'],
         'normalize_features': kwargs['normalize_features'],
-        'features': ", ".join(kwargs['features'])
+        'features': ", ".join(kwargs['features'])[:249]
     }
     mlflow.log_params(params)
 
@@ -485,7 +485,7 @@ def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl20
 
         # specify the output directory where the results will be stored
         out_dir = os.path.join(PROJECT_DIR, "data", dataset, 'results',
-                               f"ensemble_{task}_{','.join(features)}_{now.strftime('%Y%m%d')}")
+                               f"ensemble_{task}_{','.join(features)[:190]}_{now.strftime('%Y%m%d')}")
 
         # remove the output directory (if it already exists and args.clear_cache was set to TRUE)
         # shutil.rmtree(out_dir) if args.clear_cache and os.path.exists(out_dir) else None
