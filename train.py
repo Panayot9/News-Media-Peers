@@ -424,7 +424,7 @@ def parse_arguments():
 
 def run_experiment(features: str = "", task: str = "fact", dataset: str = "acl2020", num_labels: int = 3,
                    type_training: str = "combine", clear_cache: bool = True, normalize_features: bool = False,
-                   skip_sites = None):
+                   skip_sites = ''):
     """Run classifier traning usign input arguments.
 
     Args:
